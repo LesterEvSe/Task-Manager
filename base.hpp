@@ -10,12 +10,11 @@ QT_END_NAMESPACE
 class Base : public QWidget
 {
     Q_OBJECT
+private:
+    Ui::Base *ui;
 
 public:
     Base(QWidget *parent = nullptr);
     ~Base();
-
-private:
-    Ui::Base *ui;
 };
 #endif // BASE_HPP
