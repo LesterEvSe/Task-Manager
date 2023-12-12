@@ -19,6 +19,9 @@ set(PROJECT_SOURCES
     task_item_widget.cpp
     task_item_widget.hpp
     base.ui
+    task.cpp
+    task.hpp
+    task.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

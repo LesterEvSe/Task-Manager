@@ -13,8 +13,8 @@ TaskItemWidget::TaskItemWidget(const QString &task, const QString &time, QWidget
 
     // CSS
     // font-weight: bold;
-    m_task_label->setStyleSheet("font-size: 14px;");
-    m_time_label->setStyleSheet("font-size: 14px;");
+    m_task_label->setStyleSheet("font-size: 18px;");
+    m_time_label->setStyleSheet("font-size: 18px;");
 
     m_task_label->setTextInteractionFlags(Qt::TextBrowserInteraction);
     m_task_label->setWordWrap(true);
@@ -30,7 +30,7 @@ TaskItemWidget::TaskItemWidget(const QString &task, const QString &time, QWidget
 
     hlayout->setAlignment(Qt::AlignVCenter);
     setLayout(hlayout);
-    m_size = QSize(hlayout->sizeHint().width()-20, hlayout->sizeHint().height() - 20);
+    m_size = hlayout->sizeHint();
 
     connect(m_button, &QPushButton::clicked, this, [this, parent](){
         QListWidget *list = qobject_cast<QListWidget*>(parent);

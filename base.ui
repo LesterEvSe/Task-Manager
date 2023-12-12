@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>360</width>
-    <height>640</height>
+    <width>720</width>
+    <height>1280</height>
    </rect>
   </property>
   <property name="font">
    <font>
-    <pointsize>14</pointsize>
+    <pointsize>20</pointsize>
    </font>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>20</pointsize>
          <italic>false</italic>
          <bold>true</bold>
         </font>
@@ -39,7 +39,7 @@
       <widget class="QToolButton" name="settingsButton">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>20</pointsize>
         </font>
        </property>
        <property name="text">
@@ -51,6 +51,12 @@
    </item>
    <item>
     <widget class="Line" name="line">
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -70,23 +76,58 @@
          </property>
         </widget>
        </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="projectsWidget">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="addProjectButton">
          <property name="text">
-          <string>Додати Завдання</string>
+          <string>Додати Проект</string>
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QListWidget" name="listWidget"/>
+       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="projectsWidget"/>
+     <widget class="QWidget" name="concreteProject">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QListWidget" name="projectTasks"/>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="allTasksWidget">
-      <layout class="QVBoxLayout" name="verticalLayout"/>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QListWidget" name="allTasksListWidget"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="pushButton">
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Додати Завдання</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="Line" name="line_2">
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -98,7 +139,7 @@
       <widget class="QPushButton" name="todayButton">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>20</pointsize>
         </font>
        </property>
        <property name="text">
@@ -110,7 +151,7 @@
       <widget class="QPushButton" name="allButton">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>20</pointsize>
         </font>
        </property>
        <property name="text">
@@ -122,7 +163,7 @@
       <widget class="QPushButton" name="projectsButton">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>20</pointsize>
         </font>
        </property>
        <property name="text">
