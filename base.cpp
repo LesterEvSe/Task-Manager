@@ -23,15 +23,16 @@ void Base::on_pushButton_clicked()
 {
     Task *taskDialog = new Task(this);
     taskDialog->resize(width(), taskDialog->height());
-    taskDialog->exec();
 
-    return;
+    QPoint currBottom = mapToGlobal(QPoint(0, height()));
+    QSize dialogSize = taskDialog->size();
+    taskDialog->move(0, currBottom.y() - dialogSize.height());
 
+    if (taskDialog->exec() != QDialog::Accepted) return;
     TaskItemWidget *taskItem = new TaskItemWidget("Тут буде якийсь текст", "12:00", m_today);
 
     QListWidgetItem *item = new QListWidgetItem();
     item->setSizeHint(taskItem->sizeHint());
-
     m_today->addItem(item);
     m_today->setItemWidget(item, taskItem);
 }
