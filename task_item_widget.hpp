@@ -14,7 +14,7 @@ class TaskItemWidget : public QWidget
 private:
     QPushButton *m_button;
     QLabel *m_task_label, *m_date_label, *m_time_label;
-    int m_priority;
+    QChar m_priority; // number
     QString m_group;
     QSize m_size;
 

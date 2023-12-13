@@ -17,9 +17,6 @@ Base::~Base() {
     delete ui;
 }
 
-
-#include <QMessageBox> // delete later
-
 void Base::on_pushButton_clicked()
 {
     Task *taskDialog = new Task(this);
@@ -30,8 +27,6 @@ void Base::on_pushButton_clicked()
     taskDialog->move(0, currBottom.y() - dialogSize.height());
 
     connect(taskDialog, &Task::sendData, this, [=](TaskData data) {
-
-        QMessageBox::information(this, "Працює?", "Тут текст");
         TaskItemWidget *taskItem = new TaskItemWidget(data, m_today);
 
         QListWidgetItem *item = new QListWidgetItem();

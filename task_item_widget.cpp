@@ -19,9 +19,13 @@ TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent):
     set_styles();
     change_view(data);
 
+    QHBoxLayout *date_time = new QHBoxLayout();
+    date_time->addWidget(m_date_label);
+    date_time->addWidget(m_time_label);
+
     QVBoxLayout *vlayout = new QVBoxLayout();
     vlayout->addWidget(m_task_label);
-    vlayout->addWidget(m_time_label);
+    vlayout->addLayout(date_time);
 
     QHBoxLayout *hlayout = new QHBoxLayout();
     hlayout->addWidget(m_button);
@@ -60,11 +64,24 @@ void TaskItemWidget::set_styles() {
     m_task_label->setWordWrap(true);
 }
 
+#include <QMessageBox>
+
 void TaskItemWidget::change_view(const TaskData &data) {
     m_task_label = new QLabel(data.task_describe, this);
-    m_date_label = new QLabel(data.date.toString(), this);
-    m_time_label = new QLabel(data.time.toString(), this);
-
-    m_priority = data.priority.at(data.priority.length()-1).digitValue();
+    m_priority = data.priority.at(data.priority.length()-1);
+    m_button->setText(m_priority);
     m_group = data.group;
+
+
+    if (data.date < QDate::currentDate() ||
+        data.date == QDate::currentDate() && data.time < QTime::currentTime()) return;
+
+    m_date_label = new QLabel(data.date.toString("dd MMM ddd"), this);
+
+    QString time;
+    if (data.time.hour() == 0 && data.time.minute() == 0)
+        time = "";
+    else
+        time = data.time.toString("hh:mm");
+    m_time_label = new QLabel(time, this);
 }
