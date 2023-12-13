@@ -11,6 +11,7 @@ QT_END_NAMESPACE
 class Base : public QWidget
 {
     Q_OBJECT
+
 private:
     Ui::Base *ui;
     QListWidget *m_today, *m_all_tasks, *m_projects;

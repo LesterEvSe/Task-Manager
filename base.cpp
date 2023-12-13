@@ -2,7 +2,6 @@
 #include "./ui_base.h"
 
 #include "task_item_widget.hpp"
-#include <QString>
 #include "task.hpp"
 
 Base::Base(QWidget *parent):
@@ -14,10 +13,12 @@ Base::Base(QWidget *parent):
     m_projects  = ui->stackedWidget->findChild<QListWidget*>("projectsListWidget");
 }
 
-Base::~Base()
-{
+Base::~Base() {
     delete ui;
 }
+
+
+#include <QMessageBox> // delete later
 
 void Base::on_pushButton_clicked()
 {
@@ -28,12 +29,16 @@ void Base::on_pushButton_clicked()
     QSize dialogSize = taskDialog->size();
     taskDialog->move(0, currBottom.y() - dialogSize.height());
 
-    if (taskDialog->exec() != QDialog::Accepted) return;
-    TaskItemWidget *taskItem = new TaskItemWidget("Тут буде якийсь текст", "12:00", m_today);
+    connect(taskDialog, &Task::sendData, this, [=](TaskData data) {
 
-    QListWidgetItem *item = new QListWidgetItem();
-    item->setSizeHint(taskItem->sizeHint());
-    m_today->addItem(item);
-    m_today->setItemWidget(item, taskItem);
+        QMessageBox::information(this, "Працює?", "Тут текст");
+        TaskItemWidget *taskItem = new TaskItemWidget(data, m_today);
+
+        QListWidgetItem *item = new QListWidgetItem();
+        item->setSizeHint(taskItem->sizeHint());
+        m_today->addItem(item);
+        m_today->setItemWidget(item, taskItem);
+    });
+    taskDialog->exec();
 }
 

@@ -3,21 +3,21 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 
-TaskItemWidget::TaskItemWidget(const QString &task, const QString &time, QWidget *parent):
+TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent):
     QWidget(parent),
-    m_button(new QPushButton(this)),
-    m_task_label(new QLabel(task, this)),
-    m_time_label(new QLabel(time, this))
+    m_task_label(new QLabel(this)),
+    m_date_label(new QLabel(this)),
+    m_time_label(new QLabel(this)),
+    m_button(new QPushButton(this))
 {
+    // task
+    // date
+    // time
+    // prior
+    // group
     m_button->setFixedSize(20, 20);
-
-    // CSS
-    // font-weight: bold;
-    m_task_label->setStyleSheet("font-size: 18px;");
-    m_time_label->setStyleSheet("font-size: 18px;");
-
-    m_task_label->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    m_task_label->setWordWrap(true);
+    set_styles();
+    change_view(data);
 
     QVBoxLayout *vlayout = new QVBoxLayout();
     vlayout->addWidget(m_task_label);
@@ -41,6 +41,8 @@ TaskItemWidget::TaskItemWidget(const QString &task, const QString &time, QWidget
         if (!item) return;
 
         list->removeItemWidget(item);
+
+        // Maybe bad idea
         delete item;
     });
 }
@@ -50,5 +52,19 @@ QSize TaskItemWidget::sizeHint() const {
 }
 
 void TaskItemWidget::set_styles() {
-    // Not implemented yet
+    // font-weight: bold;
+    m_task_label->setStyleSheet("font-size: 18px;");
+    m_time_label->setStyleSheet("font-size: 18px;");
+
+    m_task_label->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    m_task_label->setWordWrap(true);
+}
+
+void TaskItemWidget::change_view(const TaskData &data) {
+    m_task_label = new QLabel(data.task_describe, this);
+    m_date_label = new QLabel(data.date.toString(), this);
+    m_time_label = new QLabel(data.time.toString(), this);
+
+    m_priority = data.priority.at(data.priority.length()-1).digitValue();
+    m_group = data.group;
 }
