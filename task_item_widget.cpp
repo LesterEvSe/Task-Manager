@@ -1,10 +1,16 @@
 #include "task_item_widget.hpp"
+#include "task.hpp"
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QListWidget>
 
-TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent):
+#include <QMessageBox> // for debug output
+
+TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base, QListWidgetItem *item):
     QWidget(parent),
+    m_base(base),
+    m_data(data),
+    m_item(item),
     m_task_label(new QLabel(this)),
     m_date_label(new QLabel(this)),
     m_time_label(new QLabel(this)),
@@ -68,9 +74,11 @@ void TaskItemWidget::set_styles() {
 }
 
 void TaskItemWidget::change_view(const TaskData &data, bool from_db) {
+    QMessageBox::information(this, "here", "mm?");
+    m_data = data;
     m_task_label = new QLabel(data.task_describe, this);
     m_priority = data.priority.at(data.priority.length()-1);
-    m_button->setText(m_priority);
+    m_button->setText(m_priority == '5' ? ' ' : m_priority);
     m_group = data.group;
 
 
@@ -87,9 +95,18 @@ void TaskItemWidget::change_view(const TaskData &data, bool from_db) {
     m_time_label = new QLabel(time, this);
 }
 
-#include <QMessageBox> // debug output
-
 void TaskItemWidget::mousePressEvent(QMouseEvent *event) {
-    QWidget::mousePressEvent(event); // If m_button clicked
-    QMessageBox::information(this, "smth", "hm?");
+    // If m_button clicked (task completed)
+    QWidget::mousePressEvent(event);
+    Task *taskDialog = m_base->create_custom_dialog(&m_data);
+
+    connect(taskDialog, &Task::sendData, this, [=](TaskData data) {
+        QListWidget *parentList = qobject_cast<QListWidget*>(parentWidget());
+        if (!parentList) return;
+
+        this->change_view(data);
+        parentList->setItemWidget(m_item, this);
+        parentList->repaint();
+    });
+    taskDialog->exec();
 }

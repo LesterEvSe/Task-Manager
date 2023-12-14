@@ -3,7 +3,7 @@
 
 #include <QMessageBox>
 
-Task::Task(QWidget *parent) :
+Task::Task(QWidget *parent, const TaskData *data) :
     QDialog(parent), ui(new Ui::Task)
 {
     ui->setupUi(this);
@@ -14,11 +14,23 @@ Task::Task(QWidget *parent) :
     ui->priorityBox->addItem("Пріоритет 4");
     ui->priorityBox->addItem("Пріоритет 5");
 
-    ui->priorityBox->setCurrentIndex(4);
-    ui->cancelButton->setDefault(false);
-
-    // Other will be add in process
+    // TODO, think about this. first item (if we not called from projects)
     ui->groupBox->addItem("Усі");
+    // add another items here
+
+    if (data) {
+        ui->mainTextEdit->setText(data->task_describe);
+        ui->dateEdit->setDate(data->date);
+        ui->timeEdit->setTime(data->time);
+
+        ui->priorityBox->setCurrentIndex(data->priority.toInt());
+        int ind = ui->groupBox->findText(data->group);
+        ui->groupBox->setCurrentIndex(ind);
+    }
+    else {
+        ui->priorityBox->setCurrentIndex(4);
+        // find and set appropriate group
+    }
 
     connect(ui->cancelButton, &QPushButton::clicked, this, &Task::on_cancelButton_clicked);
     connect(ui->okButton, &QPushButton::clicked, this, &Task::on_okButton_clicked);

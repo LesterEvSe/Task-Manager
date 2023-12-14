@@ -19,7 +19,8 @@ private:
     void on_okButton_clicked();
 
 public:
-    explicit Task(QWidget *parent = nullptr);
+    // TODO Think about Array of groups as parameter
+    explicit Task(QWidget *parent = nullptr, const TaskData *data = nullptr);
     ~Task();
 
 signals:
