@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QString>
+//#include <QMouseEvent>
+#include <QTouchEvent>
 
 class TaskItemWidget : public QWidget
 {
@@ -22,9 +24,11 @@ private:
 
 public:
     TaskItemWidget(const TaskData &data, QWidget *parent);
-    void change_view(const TaskData &data);
-
+    void change_view(const TaskData &data, bool from_db = false);
     QSize sizeHint() const override;
+
+// Own signals
+    void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif // TASKITEMWIDGET_HPP

@@ -15,9 +15,11 @@ TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent):
     // time
     // prior
     // group
-    m_button->setFixedSize(20, 20);
-    set_styles();
+    m_button->setFixedSize(30, 30);
+
+    // change view, then set styles. Without data, we can not move them
     change_view(data);
+    set_styles();
 
     QHBoxLayout *date_time = new QHBoxLayout();
     date_time->addWidget(m_date_label);
@@ -58,23 +60,22 @@ QSize TaskItemWidget::sizeHint() const {
 void TaskItemWidget::set_styles() {
     // font-weight: bold;
     m_task_label->setStyleSheet("font-size: 18px;");
+    m_date_label->setStyleSheet("font-size: 18px;");
     m_time_label->setStyleSheet("font-size: 18px;");
 
     m_task_label->setTextInteractionFlags(Qt::TextBrowserInteraction);
     m_task_label->setWordWrap(true);
 }
 
-#include <QMessageBox>
-
-void TaskItemWidget::change_view(const TaskData &data) {
+void TaskItemWidget::change_view(const TaskData &data, bool from_db) {
     m_task_label = new QLabel(data.task_describe, this);
     m_priority = data.priority.at(data.priority.length()-1);
     m_button->setText(m_priority);
     m_group = data.group;
 
 
-    if (data.date < QDate::currentDate() ||
-        data.date == QDate::currentDate() && data.time < QTime::currentTime()) return;
+    if (!from_db && (data.date < QDate::currentDate() ||
+        data.date == QDate::currentDate() && data.time < QTime::currentTime())) return;
 
     m_date_label = new QLabel(data.date.toString("dd MMM ddd"), this);
 
@@ -84,4 +85,11 @@ void TaskItemWidget::change_view(const TaskData &data) {
     else
         time = data.time.toString("hh:mm");
     m_time_label = new QLabel(time, this);
+}
+
+#include <QMessageBox> // debug output
+
+void TaskItemWidget::mousePressEvent(QMouseEvent *event) {
+    QWidget::mousePressEvent(event); // If m_button clicked
+    QMessageBox::information(this, "smth", "hm?");
 }

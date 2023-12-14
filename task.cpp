@@ -15,6 +15,7 @@ Task::Task(QWidget *parent) :
     ui->priorityBox->addItem("Пріоритет 5");
 
     ui->priorityBox->setCurrentIndex(4);
+    ui->cancelButton->setDefault(false);
 
     // Other will be add in process
     ui->groupBox->addItem("Усі");
