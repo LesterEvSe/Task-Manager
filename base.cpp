@@ -39,60 +39,19 @@ Task *Base::create_custom_dialog(const TaskData *data) {
     return taskDialog;
 }
 
+void Base::create_task(TaskData data) {
+    QListWidgetItem *item = new QListWidgetItem();
+    TaskItemWidget *taskItem = new TaskItemWidget(data, m_today, this);
+    connect(taskItem, &TaskItemWidget::sendNewData, this, &Base::create_task);
+
+    item->setSizeHint(taskItem->sizeHint());
+    m_today->addItem(item);
+    m_today->setItemWidget(item, taskItem);
+}
+
 void Base::on_pushButton_clicked()
 {
     Task *taskDialog = create_custom_dialog();
-    connect(taskDialog, &Task::sendData, this, [=](TaskData data) {
-
-        QListWidgetItem *item = new QListWidgetItem();
-        TaskItemWidget *taskItem = new TaskItemWidget(data, m_today, this, item);
-
-        item->setSizeHint(taskItem->sizeHint());
-        m_today->addItem(item);
-        m_today->setItemWidget(item, taskItem);
-    });
+    connect(taskDialog, &Task::sendData, this, &Base::create_task);
     taskDialog->exec();
 }
-
-/*
-void Base::mousePressEvent(QMouseEvent *event) {
-    // Get the widget we clicked on
-    QWidget *curr_widget = qApp->widgetAt(event->globalPos());
-
-    QMessageBox::information(this, "layer 0", "");
-    QListWidget *listWidget = qobject_cast<QListWidget*>(curr_widget);
-    if (!listWidget) {
-        // Basic implementation here
-        QWidget::mousePressEvent(event);
-        return;
-    }
-
-    QMessageBox::information(this, "layer 1", "get listWidget");
-
-    QListWidgetItem *item = listWidget->itemAt(event->pos());
-    if (!item) {
-        QWidget::mousePressEvent(event);
-        return;
-    }
-    QMessageBox::information(this, "layer 2", "get item");
-    item->setText("новый текст");
-    listWidget->repaint();
-    return;
-
-
-    TaskItemWidget *customItem = qobject_cast<TaskItemWidget*>(listWidget->itemWidget(item));
-    if (!customItem) {
-        QWidget::mousePressEvent(event);
-        return;
-    }
-
-    Task *taskDialog = create_custom_dialog();
-    connect(taskDialog, &Task::sendData, this, [=](TaskData data) {
-
-        customItem->change_view(data);
-        //        int ind = parentList->row(qobject_cast<QListWidgetItem*>(this));
-        //        parentList->update(parentList->visualItemRect(parentList->item(ind)));
-    });
-    taskDialog->exec();
-}
-*/

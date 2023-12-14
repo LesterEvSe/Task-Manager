@@ -23,7 +23,7 @@ Task::Task(QWidget *parent, const TaskData *data) :
         ui->dateEdit->setDate(data->date);
         ui->timeEdit->setTime(data->time);
 
-        ui->priorityBox->setCurrentIndex(data->priority.toInt());
+        ui->priorityBox->setCurrentIndex(data->priority - 1);
         int ind = ui->groupBox->findText(data->group);
         ui->groupBox->setCurrentIndex(ind);
     }
@@ -55,7 +55,7 @@ void Task::on_okButton_clicked() {
     task_data.task_describe = ui->mainTextEdit->toPlainText();
     task_data.date = ui->dateEdit->date();
     task_data.time = ui->timeEdit->time();
-    task_data.priority = ui->priorityBox->currentText();
+    task_data.priority = (*(ui->priorityBox->currentText().toStdString().end() - 1))-'0';
     task_data.group = ui->groupBox->currentText();
 
     emit sendData(task_data);

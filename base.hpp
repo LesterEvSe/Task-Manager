@@ -19,6 +19,8 @@ private:
     Ui::Base *ui;
     QListWidget *m_today, *m_all_tasks, *m_projects;
 
+    void create_task(TaskData data);
+
 private slots:
     void on_pushButton_clicked();
 

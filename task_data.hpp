@@ -9,7 +9,7 @@ struct TaskData {
     QString task_describe;
     QDate date;
     QTime time;
-    QString priority;
+    int priority;
     QString group;
 };
 
