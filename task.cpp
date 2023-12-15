@@ -8,14 +8,14 @@ Task::Task(QWidget *parent, const TaskData *data) :
 {
     ui->setupUi(this);
 
-    ui->priorityBox->addItem("Пріоритет 1");
-    ui->priorityBox->addItem("Пріоритет 2");
-    ui->priorityBox->addItem("Пріоритет 3");
-    ui->priorityBox->addItem("Пріоритет 4");
-    ui->priorityBox->addItem("Пріоритет 5");
+    ui->priorityBox->addItem("Priority 1");
+    ui->priorityBox->addItem("Priority 2");
+    ui->priorityBox->addItem("Priority 3");
+    ui->priorityBox->addItem("Priority 4");
+    ui->priorityBox->addItem("Priority 5");
 
     // TODO, think about this. first item (if we not called from projects)
-    ui->groupBox->addItem("Усі");
+    ui->groupBox->addItem("All");
     // add another items here
 
     if (data) {
@@ -28,6 +28,8 @@ Task::Task(QWidget *parent, const TaskData *data) :
         ui->groupBox->setCurrentIndex(ind);
     }
     else {
+        ui->dateEdit->setDate(QDate::currentDate());
+        ui->timeEdit->setTime(QTime::currentTime());
         ui->priorityBox->setCurrentIndex(4);
         // find and set appropriate group
     }
@@ -42,8 +44,8 @@ Task::~Task() {
 
 void Task::on_cancelButton_clicked() {
     QMessageBox dualChoose;
-    dualChoose.setText("Видалити зміни?");
-    dualChoose.setInformativeText("Внесені зміни не будуть збережені.");
+    dualChoose.setText("Delete changes?");
+    dualChoose.setInformativeText("The changes you make will not be saved.");
     dualChoose.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
     if (dualChoose.exec() == QMessageBox::Ok)

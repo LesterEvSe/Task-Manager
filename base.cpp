@@ -7,13 +7,12 @@
 Base::Base(QWidget *parent):
     QWidget(parent), ui(new Ui::Base)
 {
-    QLocale::setDefault(QLocale(QLocale::Ukrainian, QLocale::Ukraine));
     ui->setupUi(this);
     m_today     = ui->stackedWidget->findChild<QListWidget*>("todayListWidget");
     m_all_tasks = ui->stackedWidget->findChild<QListWidget*>("allTasksListWidget");
     m_projects  = ui->stackedWidget->findChild<QListWidget*>("projectsListWidget");
 
-    QListWidgetItem *expired = new QListWidgetItem("Прострочено");
+    QListWidgetItem *expired = new QListWidgetItem("Overdue");
     m_today->addItem(expired);
     // here download expired data from db
 

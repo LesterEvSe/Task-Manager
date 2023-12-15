@@ -22,7 +22,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Завдання і Опис</string>
+      <string>Task and Description</string>
      </property>
     </widget>
    </item>
@@ -47,7 +47,7 @@
      <item>
       <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>Відміна</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
@@ -90,7 +90,7 @@
      <item>
       <widget class="QPushButton" name="okButton">
        <property name="text">
-        <string>Ок</string>
+        <string>Ok</string>
        </property>
       </widget>
      </item>
