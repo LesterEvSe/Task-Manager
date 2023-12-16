@@ -22,7 +22,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="currPageLabel">
        <property name="font">
         <font>
          <pointsize>20</pointsize>
@@ -83,19 +83,12 @@
        <item>
         <widget class="QPushButton" name="addProjectButton">
          <property name="text">
-          <string>Додати Проект</string>
+          <string>Add Project</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QListWidget" name="listWidget"/>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="concreteProject">
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <widget class="QListWidget" name="projectTasks"/>
        </item>
       </layout>
      </widget>

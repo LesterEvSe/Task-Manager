@@ -21,10 +21,7 @@ Task::Task(QWidget *parent, const TaskData *data) :
     if (data) {
         ui->mainTextEdit->setText(data->task_describe);
         m_date = data->date == QDate() ? QDate::currentDate() : data->date;
-        m_time = data->time == QTime() ? QTime::currentTime() : data->time;
-
         ui->dateEdit->setDate(m_date);
-        ui->timeEdit->setTime(m_time);
 
         ui->priorityBox->setCurrentIndex(data->priority - 1);
         int ind = ui->groupBox->findText(data->group);
@@ -32,9 +29,7 @@ Task::Task(QWidget *parent, const TaskData *data) :
     }
     else {
         m_date = QDate::currentDate();
-        m_time = QTime::currentTime();
         ui->dateEdit->setDate(m_date);
-        ui->timeEdit->setTime(m_time);
         ui->priorityBox->setCurrentIndex(4);
         // find and set appropriate group
     }
@@ -60,8 +55,15 @@ void Task::on_cancelButton_clicked() {
 void Task::on_okButton_clicked() {
     TaskData task_data;
     task_data.task_describe = ui->mainTextEdit->toPlainText();
-    task_data.date = ui->dateEdit->date() <= m_date ? QDate() : ui->dateEdit->date();
-    task_data.time = ui->timeEdit->time() <= m_time ? QTime() : ui->timeEdit->time();
+
+    task_data.date = ui->dateEdit->date() < m_date ? QDate() : ui->dateEdit->date();
+    if (task_data.date == QDate())
+        task_data.time = QTime();
+    else if (task_data.date == QDate::currentDate())
+        task_data.time = ui->timeEdit->time() <= m_time ? QTime() : ui->timeEdit->time();
+    else
+        task_data.time = ui->timeEdit->time();
+
     task_data.priority = (*(ui->priorityBox->currentText().toStdString().end() - 1))-'0';
     task_data.group = ui->groupBox->currentText();
 

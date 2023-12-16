@@ -31,6 +31,7 @@ public:
     void change_view(const TaskData &data, bool from_db = false);
     QSize sizeHint() const override;
 
+    const TaskData &get_data() const;
     ~TaskItemWidget();
 
 // Own signals

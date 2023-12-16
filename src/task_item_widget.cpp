@@ -47,6 +47,10 @@ TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base
     connect(m_button, &QPushButton::clicked, this, &TaskItemWidget::delete_item);
 }
 
+const TaskData &TaskItemWidget::get_data() const {
+    return m_data;
+}
+
 TaskItemWidget::~TaskItemWidget() {
     delete m_button;
     delete m_task_label;
@@ -86,7 +90,12 @@ void TaskItemWidget::change_view(const TaskData &data, bool from_db) {
     m_data = data;
     m_task_label = new QLabel(data.task_describe, this);
     m_button->setText(m_data.priority == 5 ? " " : QString::number(m_data.priority));
-
+    switch (m_data.priority) {
+        case 1: m_button->setStyleSheet("background-color: green");  break;
+        case 2: m_button->setStyleSheet("background-color: purple"); break;
+        case 3: m_button->setStyleSheet("background-color: blue");   break;
+        case 4: m_button->setStyleSheet("background-color: red");    break;
+    };
 
     if (!from_db && (data.date < QDate::currentDate() ||
         data.date == QDate::currentDate() && data.time < QTime::currentTime())) return;

@@ -17,6 +17,11 @@ class Base : public QWidget
 
 private:
     Ui::Base *ui;
+    enum Ind {
+        TODAY,
+        PROJECTS,
+        ALL_TASKS
+    };
     QListWidget *m_today, *m_all_tasks, *m_projects;
 
     void create_task(TaskData data);
@@ -24,12 +29,15 @@ private:
 private slots:
     void on_pushButton_clicked();
 
+    void on_allButton_clicked();
+
+    void on_todayButton_clicked();
+
+    void on_projectsButton_clicked();
+
 public:
     Task *create_custom_dialog(const TaskData *data = nullptr);
     Base(QWidget *parent = nullptr);
     ~Base();
-
-// Own signals
-//    void mousePressEvent(QMouseEvent *event) override;
 };
 #endif // BASE_HPP
