@@ -9,6 +9,8 @@
 Base::Base(QWidget *parent):
     QWidget(parent), ui(new Ui::Base)
 {
+    Database *db = Database::get_instance();
+
     QLocale::setDefault(QLocale(QLocale::Ukrainian, QLocale::Ukraine));
     ui->setupUi(this);
     m_today     = ui->stackedWidget->findChild<QListWidget*>("todayListWidget");
@@ -29,21 +31,25 @@ Base::Base(QWidget *parent):
 
 // Need to test
 Base::~Base() {
+    delete ui;
+}
+
+void Base::closeEvent(QCloseEvent *event) {
     Database *db = Database::get_instance();
     std::vector<TaskData> data;
 
-    // Without "Overude" line
+    // Without "Overdue" line
     for (int i = 1; i < m_all_tasks->count(); ++i) {
         QListWidgetItem *curr = m_all_tasks->item(i);
 
         TaskItemWidget *taskItem = dynamic_cast<TaskItemWidget*>(
             m_all_tasks->itemWidget(curr)
-        );
+            );
 
         if (!taskItem) continue;
         data.emplace_back(taskItem->get_data());
     }
-    delete ui;
+    db->save(data);
 }
 
 Task *Base::create_custom_dialog(const TaskData *data) {

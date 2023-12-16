@@ -20,7 +20,7 @@ private:
 
 public:
     static Database *get_instance();
-    void save(const std::vector<TaskData> &data); // or another data type
+    void save(const std::vector<TaskData> &data);
 
     std::vector<TaskData> get_overdue_task() const;
     std::vector<TaskData> get_today_task() const;
