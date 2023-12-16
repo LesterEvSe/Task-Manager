@@ -31,6 +31,7 @@ set(HEADERS
     src/task.hpp
     src/task_data.hpp
     src/database.hpp
+    src/task_enum.hpp
 )
 
 # To display these files in Qt Creator

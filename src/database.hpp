@@ -1,7 +1,8 @@
 #ifndef DATABASE_HPP
 #define DATABASE_HPP
 
-#include <task_data.hpp>
+#include "task_enum.hpp"
+#include "task_data.hpp"
 
 #include <QtSql>
 #include <vector>
@@ -10,6 +11,13 @@
 class Database
 {
 private:
+    enum Data {
+        ID,
+        TASK_DESCRIPTION,
+        DATA_TIME,
+        PRIORITY,
+        GROUP
+    };
     QSqlDatabase m_task_manager;
 
     Database(const Database&) = delete;
@@ -20,11 +28,13 @@ private:
 
 public:
     static Database *get_instance();
-    void save(const std::vector<TaskData> &data);
 
-    std::vector<TaskData> get_overdue_task() const;
-    std::vector<TaskData> get_today_task() const;
-    std::vector<TaskData> get_all_active_task() const;
+    // return inserted value index
+    int add(const TaskData &data);
+    void del(int id);
+//    void save(const std::vector<TaskData> &data);
+
+    std::vector<TaskData> get_task(TaskEnum task) const;
     std::vector<QString>  get_projects() const;
     std::vector<TaskData> get_project_data(const QString &project);
 };

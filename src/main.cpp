@@ -3,8 +3,11 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    Base w;
-    w.show();
-    return a.exec();
+    QApplication app(argc, argv);
+    Base base_window;
+    base_window.show();
+
+    int res = app.exec();
+    base_window.save_tasks();
+    return res;
 }

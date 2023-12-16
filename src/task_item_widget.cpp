@@ -1,5 +1,6 @@
 #include "task_item_widget.hpp"
 #include "task.hpp"
+#include "database.hpp"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -25,8 +26,10 @@ TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base
     m_button->setFixedSize(30, 30);
 
     // change view, then set styles. Without data, we can not move them
+    // Order is IMPORTANT!!!
     change_view(data);
     set_styles();
+    m_db_id = Database::get_instance()->add(m_data);
 
     QHBoxLayout *date_time = new QHBoxLayout();
     date_time->addWidget(m_date_label);
@@ -52,6 +55,7 @@ const TaskData &TaskItemWidget::get_data() const {
 }
 
 TaskItemWidget::~TaskItemWidget() {
+    Database::get_instance()->del(m_db_id);
     delete m_button;
     delete m_task_label;
     delete m_date_label;
