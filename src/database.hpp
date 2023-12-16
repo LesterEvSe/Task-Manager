@@ -34,6 +34,7 @@ public:
     void del(int id);
 //    void save(const std::vector<TaskData> &data);
 
+    // Data, id
     std::vector<TaskData> get_task(TaskEnum task) const;
     std::vector<QString>  get_projects() const;
     std::vector<TaskData> get_project_data(const QString &project);

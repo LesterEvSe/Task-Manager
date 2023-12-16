@@ -18,7 +18,6 @@ private:
     QListWidget *m_parent;
     Base *m_base;
     TaskData m_data; // for restore data in window
-    int m_db_id;
 
     QPushButton *m_button;
     QLabel *m_task_label, *m_date_label, *m_time_label;

@@ -37,43 +37,8 @@ Base::Base(QWidget *parent):
         create_task(data);
 }
 
-// Need to test
 Base::~Base() {
-    /*
-    std::vector<TaskData> data;
-
-    // Without "Overdue" line
-    for (int i = 1; i < m_all_tasks->count(); ++i) {
-        QListWidgetItem *curr = m_all_tasks->item(i);
-
-        TaskItemWidget *taskItem = dynamic_cast<TaskItemWidget*>(
-            m_all_tasks->itemWidget(curr)
-            );
-
-        if (!taskItem) continue;
-        data.emplace_back(taskItem->get_data());
-    }
-    m_database->save(data);
-    */
     delete ui;
-}
-
-void Base::save_tasks() {
-//    std::vector<TaskData> data;
-
-//    // Without "Overdue" line
-//    for (int i = 1; i < m_all_tasks->count(); ++i) {
-//        QListWidgetItem *curr = m_all_tasks->item(i);
-
-//        TaskItemWidget *taskItem = dynamic_cast<TaskItemWidget*>(
-//            m_all_tasks->itemWidget(curr)
-//        );
-
-//        if (!taskItem) continue;
-//        data.emplace_back(taskItem->get_data());
-//    }
-//    m_database->save(data);
-//    QMessageBox::information(this, "Save data", QString::number(data.size()));
 }
 
 void Base::show_error_and_exit(const QString &error) {

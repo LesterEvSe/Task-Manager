@@ -29,7 +29,9 @@ TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base
     // Order is IMPORTANT!!!
     change_view(data);
     set_styles();
-    m_db_id = Database::get_instance()->add(m_data);
+
+    if (m_data.id <= -1)
+        m_data.id = Database::get_instance()->add(m_data);
 
     QHBoxLayout *date_time = new QHBoxLayout();
     date_time->addWidget(m_date_label);
@@ -55,7 +57,6 @@ const TaskData &TaskItemWidget::get_data() const {
 }
 
 TaskItemWidget::~TaskItemWidget() {
-    Database::get_instance()->del(m_db_id);
     delete m_button;
     delete m_task_label;
     delete m_date_label;
@@ -70,9 +71,8 @@ void TaskItemWidget::delete_item() {
     QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
     if (!item) return;
 
+    Database::get_instance()->del(m_data.id);
     list->removeItemWidget(item);
-
-    // Maybe bad idea
     delete item;
 }
 

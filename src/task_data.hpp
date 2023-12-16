@@ -6,6 +6,7 @@
 #include <QTime>
 
 struct TaskData {
+    int id = -1;
     QString task_describe;
     QDate date;
     QTime time;

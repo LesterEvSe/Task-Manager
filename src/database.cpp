@@ -63,36 +63,12 @@ int Database::add(const TaskData &data) {
 void Database::del(int id) {
     QSqlQuery delete_query;
     delete_query.prepare("DELETE FROM TaskData WHERE task_id = :task_id");
-    delete_query.bindValue(":id", id);
+    delete_query.bindValue(":task_id", id);
 
     if (!delete_query.exec())
         throw QSqlError(delete_query.lastError().text(),
                         QString("Failed to delete the data."));
 }
-
-/*
-void Database::save(const std::vector<TaskData> &data) {
-    QSqlQuery clear_query("DELETE FROM TaskData");
-    if (!clear_query.exec())
-        throw QSqlError(clear_query.lastError().text(),
-                        QString("'save'. Failed to delete table."));
-
-    QSqlQuery insert_query;
-    insert_query.prepare("INSERT INTO TaskData (task_describe, date_time, priority, task_group)"
-                         "VALUES (:task_describe, :date_time, :priority, :task_group)");
-
-    for (int i = 0; i < data.size(); ++i) {
-        insert_query.bindValue(":task_describe", data[i].task_describe);
-        insert_query.bindValue(":date_time", QDateTime(data[i].date, data[i].time));
-        insert_query.bindValue(":priority", data[i].priority);
-        insert_query.bindValue(":task_group", data[i].group);
-
-        if (!insert_query.exec())
-            throw QSqlError(insert_query.lastError().text(),
-                            QString("'save'. Failed to insert data."));
-    }
-}
-*/
 
 std::vector<TaskData> Database::get_task(TaskEnum task) const {
     QSqlQuery query;
@@ -119,6 +95,7 @@ std::vector<TaskData> Database::get_task(TaskEnum task) const {
     std::vector<TaskData> data;
     while (query.next()) {
         TaskData temp;
+        temp.id = query.value(ID).toInt();
         temp.task_describe = query.value(TASK_DESCRIPTION).toString();
 
         QDateTime data_time = query.value(DATA_TIME).toDateTime();
