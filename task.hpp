@@ -13,6 +13,8 @@ class Task : public QDialog
 
 private:
     Ui::Task *ui;
+    QDate m_date;
+    QTime m_time;
 
 // Own signals
     void on_cancelButton_clicked();
