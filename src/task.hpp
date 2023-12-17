@@ -21,6 +21,8 @@ private:
     void on_okButton_clicked();
 
 public:
+    static QDateTime EDGE;
+
     // TODO Think about Array of groups as parameter
     explicit Task(QWidget *parent = nullptr, const TaskData *data = nullptr);
     ~Task();

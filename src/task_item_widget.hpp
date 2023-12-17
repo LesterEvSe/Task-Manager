@@ -30,7 +30,7 @@ private:
 
 public:
     TaskItemWidget(const TaskData &data, QWidget *parent, Base *base);
-    void change_view(const TaskData &data, bool from_db = false);
+    void change_view(const TaskData &data);
     QSize sizeHint() const override;
 
     const TaskData &get_data() const;

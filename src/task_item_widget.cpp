@@ -92,7 +92,7 @@ void TaskItemWidget::set_styles() {
     m_task_label->setWordWrap(true);
 }
 
-void TaskItemWidget::change_view(const TaskData &data, bool from_db) {
+void TaskItemWidget::change_view(const TaskData &data) {
     m_data = data;
     m_task_label = new QLabel(data.task_describe, this);
     m_button->setText(m_data.priority == 5 ? " " : QString::number(m_data.priority));
@@ -103,17 +103,15 @@ void TaskItemWidget::change_view(const TaskData &data, bool from_db) {
         case 4: m_button->setStyleSheet("background-color: red");    break;
     };
 
-    if (!from_db && (data.date < QDate::currentDate() ||
-        data.date == QDate::currentDate() && data.time < QTime::currentTime())) return;
-
+    if (data.date >= Task::EDGE.date()) return;
     m_date_label = new QLabel(data.date.toString("dd MMM ddd"), this);
 
-    QString time;
-    if (data.time.hour() == 0 && data.time.minute() == 0)
-        time = "";
-    else
-        time = data.time.toString("hh:mm");
-    m_time_label = new QLabel(time, this);
+//    QString time = data.time >= Task::EDGE.time() ? "" : data.time.toString("hh:mm");
+//    if (data.time.hour() == 0 && data.time.minute() == 0)
+//        time = "";
+//    else
+//        time = data.time.toString("hh:mm");
+    m_time_label = new QLabel(data.time >= Task::EDGE.time() ? "" : data.time.toString("hh:mm"), this);
 }
 
 void TaskItemWidget::mousePressEvent(QMouseEvent *event) {

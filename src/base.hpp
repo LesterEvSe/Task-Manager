@@ -35,6 +35,7 @@ private slots:
     void on_allButton_clicked();
     void on_todayButton_clicked();
     void on_projectsButton_clicked();
+    void on_addProjectButton_clicked();
 
 public:
     Base(QWidget *parent = nullptr);

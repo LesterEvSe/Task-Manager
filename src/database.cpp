@@ -109,7 +109,7 @@ std::vector<TaskData> Database::get_task(TaskEnum task) const {
     QSqlQuery query;
     switch (task) {
     case OVERDUE:
-        query.prepare("SELECT * FROM TaskData WHERE date_time =< :current_date_time AND date_time != '0000-00-00 00:00:00'");
+        query.prepare("SELECT * FROM TaskData WHERE date_time < :current_date_time");
         query.bindValue(":current_date_time", QDateTime::currentDateTime());
         break;
 
@@ -117,7 +117,7 @@ std::vector<TaskData> Database::get_task(TaskEnum task) const {
         break;
 
     case ALL_ACTIVE:
-        query.prepare("SELECT * FROM TaskData WHERE date_time > :current_date_time OR date_time = '0000-00-00 00:00:00'");
+        query.prepare("SELECT * FROM TaskData WHERE date_time >= :current_date_time");
         query.bindValue(":current_date_time", QDateTime::currentDateTime());
         break;
 

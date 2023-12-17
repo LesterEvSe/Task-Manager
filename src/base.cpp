@@ -3,8 +3,10 @@
 
 #include "task_item_widget.hpp"
 #include "task_enum.hpp"
+#include "addproject.hpp"
 
 #include <QMessageBox>
+#include <QInputDialog>
 #include <QSqlError> // for exceptions
 #include <exception>
 
@@ -22,6 +24,7 @@ Base::Base(QWidget *parent):
     m_today     = ui->stackedWidget->findChild<QListWidget*>("todayListWidget");
     m_all_tasks = ui->stackedWidget->findChild<QListWidget*>("allTasksListWidget");
     m_projects  = ui->stackedWidget->findChild<QListWidget*>("projectsListWidget");
+    m_projects->setWordWrap(true);
 
     m_today->addItem(new QListWidgetItem("Overdue"));
     m_all_tasks->addItem(new QListWidgetItem("Overdue"));
@@ -31,6 +34,8 @@ Base::Base(QWidget *parent):
     for (const TaskData &data : m_database->get_task(TaskEnum::OVERDUE))
         create_task(data);
 
+    for (const QString &project_name : m_database->get_projects())
+        m_projects->addItem(new QListWidgetItem(project_name));
 
     m_today->addItem(new QListWidgetItem(
         QDate::currentDate().toString("dd MMM ddd")
@@ -44,8 +49,7 @@ Base::Base(QWidget *parent):
         show_error_and_exit("Caught SQL error in func " + error.text());
     } catch (const std::exception& error) {
         show_error_and_exit("Caught exception: " + QString(error.what()));
-    }
-    catch(...) {
+    } catch(...) {
         show_error_and_exit("Caught unknown exception");
     }
 }
@@ -105,3 +109,20 @@ void Base::on_projectsButton_clicked()
     ui->currPageLabel->setText("Projects");
 }
 
+
+void Base::on_addProjectButton_clicked()
+{
+    AddProject *project = new AddProject(this);
+    project->resize(width(), project->height());
+
+    QPoint currBottom = mapToGlobal(QPoint(0, height()));
+    QSize dialogSize = project->size();
+    project->move(0, currBottom.y() - dialogSize.height());
+
+    connect(project, &AddProject::textEntered, this, [this](QString text){
+        m_database->add_project(text);
+        QListWidgetItem *item = new QListWidgetItem(text);
+        m_projects->addItem(item);
+    });
+    project->exec();
+}
