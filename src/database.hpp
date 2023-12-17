@@ -30,14 +30,15 @@ public:
     static Database *get_instance();
 
     // return inserted value index
-    int add(const TaskData &data);
-    void del(int id);
-//    void save(const std::vector<TaskData> &data);
+    int add_task(const TaskData &data);
+    int add_project(const QString &project);
 
-    // Data, id
+    void del_task(int id);
+    void del_project(int id);
+
     std::vector<TaskData> get_task(TaskEnum task) const;
     std::vector<QString>  get_projects() const;
-    std::vector<TaskData> get_project_data(const QString &project);
+    std::vector<TaskData> get_project_data(const QString &project) const;
 };
 
 #endif // DATABASE_HPP

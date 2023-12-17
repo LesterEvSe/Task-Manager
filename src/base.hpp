@@ -24,7 +24,7 @@ private:
     };
 
     Ui::Base *ui;
-    Database *m_database;
+    static Database *m_database;
     QListWidget *m_today, *m_all_tasks, *m_projects;
 
     void create_task(const TaskData &data);

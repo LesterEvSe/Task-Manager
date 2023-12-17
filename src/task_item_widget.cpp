@@ -1,11 +1,13 @@
 #include "task_item_widget.hpp"
 #include "task.hpp"
-#include "database.hpp"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
 #include <QMessageBox> // for debug output
+
+Database *TaskItemWidget::m_database = Database::get_instance();
+
 
 TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base):
     QWidget(parent),
@@ -31,7 +33,7 @@ TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base
     set_styles();
 
     if (m_data.id <= -1)
-        m_data.id = Database::get_instance()->add(m_data);
+        m_data.id = m_database->add_task(m_data);
 
     QHBoxLayout *date_time = new QHBoxLayout();
     date_time->addWidget(m_date_label);
@@ -71,7 +73,7 @@ void TaskItemWidget::delete_item() {
     QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
     if (!item) return;
 
-    Database::get_instance()->del(m_data.id);
+    m_database->del_task(m_data.id);
     list->removeItemWidget(item);
     delete item;
 }

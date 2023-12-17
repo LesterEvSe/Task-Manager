@@ -3,6 +3,7 @@
 
 #include "base.hpp"
 #include "task_data.hpp"
+#include "database.hpp"
 
 #include <QWidget>
 #include <QListWidget>
@@ -15,6 +16,7 @@ class TaskItemWidget : public QWidget
 {
     Q_OBJECT
 private:
+    static Database *m_database;
     QListWidget *m_parent;
     Base *m_base;
     TaskData m_data; // for restore data in window

@@ -6,12 +6,14 @@
 
 #include <QMessageBox>
 #include <QSqlError> // for exceptions
+#include <exception>
+
+Database *Base::m_database = Database::get_instance();
 
 
 Base::Base(QWidget *parent):
     QWidget(parent),
-    ui(new Ui::Base),
-    m_database(Database::get_instance())
+    ui(new Ui::Base)
 {
     // For usual data and time view
     QLocale::setDefault(QLocale(QLocale::Ukrainian, QLocale::Ukraine));
@@ -25,8 +27,10 @@ Base::Base(QWidget *parent):
     m_all_tasks->addItem(new QListWidgetItem("Overdue"));
 
     // Download overdue data
+    try {
     for (const TaskData &data : m_database->get_task(TaskEnum::OVERDUE))
         create_task(data);
+
 
     m_today->addItem(new QListWidgetItem(
         QDate::currentDate().toString("dd MMM ddd")
@@ -35,6 +39,15 @@ Base::Base(QWidget *parent):
 
     for (const TaskData &data : m_database->get_task(TaskEnum::ALL_ACTIVE))
         create_task(data);
+
+    } catch (const QSqlError &error) {
+        show_error_and_exit("Caught SQL error in func " + error.text());
+    } catch (const std::exception& error) {
+        show_error_and_exit("Caught exception: " + QString(error.what()));
+    }
+    catch(...) {
+        show_error_and_exit("Caught unknown exception");
+    }
 }
 
 Base::~Base() {
