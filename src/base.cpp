@@ -4,6 +4,7 @@
 #include "task_item_widget.hpp"
 #include "task_enum.hpp"
 #include "addproject.hpp"
+#include "concreteproject.hpp"
 
 #include <QMessageBox>
 #include <QInputDialog>
@@ -29,21 +30,26 @@ Base::Base(QWidget *parent):
     m_today->addItem(new QListWidgetItem("Overdue"));
     m_all_tasks->addItem(new QListWidgetItem("Overdue"));
 
-    // Download overdue data
     try {
+    // Download overdue data
     for (const TaskData &data : m_database->get_task(TaskEnum::OVERDUE))
         create_task(data);
-
-    for (const QString &project_name : m_database->get_projects())
-        m_projects->addItem(new QListWidgetItem(project_name));
 
     m_today->addItem(new QListWidgetItem(
         QDate::currentDate().toString("dd MMM ddd")
     ));
+
+    // Download other data
     m_all_tasks->addItem(new QListWidgetItem("Current"));
 
     for (const TaskData &data : m_database->get_task(TaskEnum::ALL_ACTIVE))
         create_task(data);
+
+    for (const QString &project_name : m_database->get_projects()) {
+        QListWidgetItem *item = new QListWidgetItem(project_name);
+//        memo[item]
+//            m_projects->addItem(new QListWidgetItem(project_name));
+    }
 
     } catch (const QSqlError &error) {
         show_error_and_exit("Caught SQL error in func " + error.text());
@@ -109,7 +115,6 @@ void Base::on_projectsButton_clicked()
     ui->currPageLabel->setText("Projects");
 }
 
-
 void Base::on_addProjectButton_clicked()
 {
     AddProject *project = new AddProject(this);
@@ -126,3 +131,18 @@ void Base::on_addProjectButton_clicked()
     });
     project->exec();
 }
+
+void Base::on_projectsListWidget_itemClicked(QListWidgetItem *item)
+{
+    ConcreteProject *project = new ConcreteProject(1, this);
+
+    // need to do it, otherwise not working
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget(project);
+    QWidget *widget = new QWidget();
+    widget->setLayout(layout);
+
+    int ind = ui->stackedWidget->addWidget(widget);
+    ui->stackedWidget->setCurrentIndex(ind);
+}
+

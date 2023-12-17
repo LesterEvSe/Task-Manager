@@ -31,10 +31,10 @@ public:
 
     // return inserted value index
     int add_task(const TaskData &data);
-    int add_project(const QString &project);
+    bool add_project(const QString &project);
 
     void del_task(int id);
-    void del_project(int id);
+    void del_project(const QString &project);
 
     std::vector<TaskData> get_task(TaskEnum task) const;
     std::vector<QString>  get_projects() const;

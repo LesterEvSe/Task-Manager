@@ -23,6 +23,7 @@ set(SOURCES
     src/task.cpp
     src/database.cpp
     src/addproject.cpp
+    src/concreteproject.cpp
 )
 
 # Necessary for moc files
@@ -34,6 +35,7 @@ set(HEADERS
     src/database.hpp
     src/task_enum.hpp
     src/addproject.hpp
+    src/concreteproject.hpp
 )
 
 # To display these files in Qt Creator
@@ -41,6 +43,7 @@ set(FORMS
     forms/base.ui
     forms/task.ui
     forms/addproject.ui
+    forms/concreteproject.ui
 )
 
 set(ALL_SOURCES

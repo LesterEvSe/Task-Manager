@@ -41,8 +41,7 @@ Database::Database():
     QSqlQuery query2("SELECT name FROM sqlite_master WHERE type='table' AND name='Projects';");
     if (!query2.next() &&
         !query2.exec("CREATE TABLE Projects ("
-                    "project_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    "project TEXT)")) {
+                    "project TEXT PRIMARY KEY UNIQUE)")) {
         QMessageBox::information(nullptr, "Failed to create Group table", query.lastError().text());
     }
 
@@ -74,15 +73,29 @@ int Database::add_task(const TaskData &data) {
     return insert_query.lastInsertId().toInt();
 }
 
-int Database::add_project(const QString &project) {
+// TODO fix bugs with adding. Check always return false
+bool Database::add_project(const QString &project) {
+    QSqlQuery check_query;
+    check_query.prepare("SELECT COUNT(*) FROM Projects WHERE project = :project");
+    check_query.bindValue(":project", project);
+
+    if (!check_query.exec())
+        throw QSqlError(check_query.lastError().text(), "Failed to check project existence.");
+    check_query.next();
+
+    // project already exist
+    if (check_query.value(0).toInt() > 0)
+        return false;
+    check_query.finish();
+
     QSqlQuery insert_query;
     insert_query.prepare("INSERT INTO Projects (project) VALUES (:project)");
-    insert_query.bindValue(":task_describe", project);
+    insert_query.bindValue(":project", project);
 
     if (!insert_query.exec())
         throw QSqlError(insert_query.lastError().text(),
                         QString("Failed to add the project."));
-    return insert_query.lastInsertId().toInt();
+    return true;
 }
 
 void Database::del_task(int id) {
@@ -95,10 +108,10 @@ void Database::del_task(int id) {
                         QString("Failed to delete the data."));
 }
 
-void Database::del_project(int id) {
+void Database::del_project(const QString &project) {
     QSqlQuery delete_query;
-    delete_query.prepare("DELETE FROM Projects WHERE project_id = :project_id");
-    delete_query.bindValue(":project_id", id);
+    delete_query.prepare("DELETE FROM Projects WHERE project = :project");
+    delete_query.bindValue(":project", project);
 
     if (!delete_query.exec())
         throw QSqlError(delete_query.lastError().text(),
@@ -147,7 +160,7 @@ std::vector<TaskData> Database::get_task(TaskEnum task) const {
 }
 
 std::vector<QString> Database::get_projects() const {
-    QSqlQuery query("SELECT project FROM Projects");
+    QSqlQuery query("SELECT * FROM Projects");
     if (!query.exec())
         throw QSqlError(query.lastError().text(), QString("'get projects'."));
 

@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <QListWidget>
 #include <QMouseEvent>
+#include <unordered_map>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Base; }
@@ -27,6 +28,9 @@ private:
     static Database *m_database;
     QListWidget *m_today, *m_all_tasks, *m_projects;
 
+    // concrete item in project. Value - index in ui->stackedWidget, id in database
+    std::unordered_map<QListWidgetItem*, std::pair<int, int>> memo;
+
     void create_task(const TaskData &data);
     void show_error_and_exit(const QString &error);
 
@@ -36,6 +40,7 @@ private slots:
     void on_todayButton_clicked();
     void on_projectsButton_clicked();
     void on_addProjectButton_clicked();
+    void on_projectsListWidget_itemClicked(QListWidgetItem *item);
 
 public:
     Base(QWidget *parent = nullptr);
