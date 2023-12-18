@@ -25,6 +25,8 @@ private:
     QLabel *m_task_label, *m_date_label, *m_time_label;
     QSize m_size;
 
+    std::vector<TaskItemWidget*> m_other_items;
+
     void set_styles();
     void delete_item();
 
@@ -32,6 +34,9 @@ public:
     TaskItemWidget(const TaskData &data, QWidget *parent, Base *base);
     void change_view(const TaskData &data);
     QSize sizeHint() const override;
+
+    void set_other_items(const std::vector<TaskItemWidget*> &other_items);
+    void delete_item_from_widget();
 
     const TaskData &get_data() const;
     ~TaskItemWidget();

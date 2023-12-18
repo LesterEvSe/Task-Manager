@@ -106,7 +106,7 @@ void Database::del_task(int id) {
                         QString("Failed to delete the data."));
 }
 
-void Database::del_project(const QString &project) {
+void Database::del_project_and_tasks(const QString &project) {
     QSqlQuery delete_query;
     delete_query.prepare("DELETE FROM Projects WHERE project = :project");
     delete_query.bindValue(":project", project);
@@ -114,6 +114,14 @@ void Database::del_project(const QString &project) {
     if (!delete_query.exec())
         throw QSqlError(delete_query.lastError().text(),
                         QString("Failed to delete the project."));
+
+    QSqlQuery del_from_task_data_query;
+    del_from_task_data_query.prepare("DELETE FROM TaskData WHERE project = :project");
+    del_from_task_data_query.bindValue(":project", project);
+
+    if (!del_from_task_data_query.exec())
+        throw QSqlError(del_from_task_data_query.lastError().text(),
+                        QString("Failed to delete the project data."));
 }
 
 std::vector<TaskData> Database::get_task(TaskEnum task) const {

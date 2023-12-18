@@ -34,7 +34,7 @@ public:
     bool add_project(const QString &project);
 
     void del_task(int id);
-    void del_project(const QString &project);
+    void del_project_and_tasks(const QString &project);
 
     std::vector<TaskData> get_task(TaskEnum task) const;
     std::vector<QString>  get_projects() const;

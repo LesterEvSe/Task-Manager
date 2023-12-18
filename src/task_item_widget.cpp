@@ -65,6 +65,22 @@ TaskItemWidget::~TaskItemWidget() {
     delete m_time_label;
 }
 
+void TaskItemWidget::set_other_items(const std::vector<TaskItemWidget*> &other_items) {
+    for (TaskItemWidget *item : other_items)
+        m_other_items.emplace_back(item);
+}
+
+void TaskItemWidget::delete_item_from_widget() {
+    QListWidget *list = qobject_cast<QListWidget*>(m_parent);
+    if (!list) return;
+
+    // return the widget item located at the coord of the parent widget
+    QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
+    if (!item) return;
+
+    list->removeItemWidget(item);
+}
+
 void TaskItemWidget::delete_item() {
     QListWidget *list = qobject_cast<QListWidget*>(m_parent);
     if (!list) return;
@@ -73,6 +89,10 @@ void TaskItemWidget::delete_item() {
     QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
     if (!item) return;
 
+    for (TaskItemWidget *item : m_other_items)
+        item->delete_item_from_widget();
+
+    // Order is important (maybe)
     m_database->del_task(m_data.id);
     list->removeItemWidget(item);
     delete item;

@@ -2,6 +2,7 @@
 #include "ui_task.h"
 
 #include <QMessageBox>
+#include "database.hpp"
 
 QDateTime Task::EDGE = QDateTime(QDate(3000, 1, 1), QTime(23, 59, 59));
 
@@ -19,6 +20,10 @@ Task::Task(QWidget *parent, const TaskData *data) :
 
     // TODO, think about this. first item (if we not called from projects)
     ui->groupBox->addItem("All");
+
+    // Think about get projects from base class and set current item based on ui->currPageLabel
+    for (const QString &project_name : Database::get_instance()->get_projects())
+        ui->groupBox->addItem(project_name);
     // add another items here
 
     if (data) {

@@ -77,14 +77,23 @@ Task *Base::create_custom_dialog(const TaskData *data) {
 }
 
 void Base::create_task(const TaskData &data) {
-    QListWidgetItem *item = new QListWidgetItem();
-    TaskItemWidget *taskItem = new TaskItemWidget(data, m_all_tasks, this);
-    connect(taskItem, &TaskItemWidget::sendNewData, this, &Base::create_task);
+    auto create = [this, &data](QListWidget *listWidget) {
+        QListWidgetItem *item = new QListWidgetItem();
+        TaskItemWidget *taskItem = new TaskItemWidget(data, m_all_tasks, this);
+        connect(taskItem, &TaskItemWidget::sendNewData, this, &Base::create_task);
 
-    item->setSizeHint(taskItem->sizeHint());
-    m_all_tasks->addItem(item);
-    m_all_tasks->setItemWidget(item, taskItem);
-    // and tasks for projects and today if need
+        item->setSizeHint(taskItem->sizeHint());
+        listWidget->addItem(item);
+        listWidget->setItemWidget(item, taskItem);
+    };
+    create(m_all_tasks);
+//    QListWidgetItem *item = new QListWidgetItem();
+//    TaskItemWidget *taskItem = new TaskItemWidget(data, m_all_tasks, this);
+//    connect(taskItem, &TaskItemWidget::sendNewData, this, &Base::create_task);
+
+//    item->setSizeHint(taskItem->sizeHint());
+//    m_all_tasks->addItem(item);
+//    m_all_tasks->setItemWidget(item, taskItem);
 }
 
 void Base::on_pushButton_clicked()
@@ -110,6 +119,10 @@ void Base::on_projectsButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(PROJECTS);
     ui->currPageLabel->setText("Projects");
+}
+
+void Base::set_project_widget() {
+    Base::on_projectsButton_clicked();
 }
 
 void Base::on_addProjectButton_clicked()

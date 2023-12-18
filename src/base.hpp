@@ -44,6 +44,7 @@ private slots:
 
 public:
     Base(QWidget *parent = nullptr);
+    void set_project_widget();
     ~Base();
 
     Task *create_custom_dialog(const TaskData *data = nullptr);
