@@ -28,8 +28,11 @@ private:
     static Database *m_database;
     QListWidget *m_today, *m_all_tasks, *m_projects;
 
-    // Concrete project name. Value - index in ui->stackedWidget (0 - is not created)
-    std::unordered_map<QString, int> memo;
+    // Concrete project name. Value - index in ui->stackedWidget (0 - is not created), it's QListWidget
+    std::unordered_map<QString, std::pair<int, QListWidget*>> memo;
+
+    void create_project(const QString &project_name);
+    void delete_project(const QString &project_name);
 
     void create_task(const TaskData &data);
     void show_error_and_exit(const QString &error);
@@ -44,8 +47,11 @@ private slots:
 
 public:
     Base(QWidget *parent = nullptr);
-    void set_project_widget();
     ~Base();
+
+    void set_project_widget();
+    std::vector<QString> get_project_names() const;
+    const QString &get_curr_label() const;
 
     Task *create_custom_dialog(const TaskData *data = nullptr);
     void save_tasks();

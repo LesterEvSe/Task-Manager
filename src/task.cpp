@@ -1,5 +1,6 @@
 #include "task.hpp"
 #include "ui_task.h"
+#include "base.hpp"
 
 #include <QMessageBox>
 #include "database.hpp"
@@ -7,8 +8,10 @@
 QDateTime Task::EDGE = QDateTime(QDate(3000, 1, 1), QTime(23, 59, 59));
 
 
-Task::Task(QWidget *parent, const TaskData *data) :
-    QDialog(parent), ui(new Ui::Task)
+Task::Task(Base *parent, const TaskData *data) :
+    QDialog(parent),
+    ui(new Ui::Task),
+    m_base(parent)
 {
     ui->setupUi(this);
 
@@ -19,12 +22,14 @@ Task::Task(QWidget *parent, const TaskData *data) :
     ui->priorityBox->addItem("Priority 5");
 
     // TODO, think about this. first item (if we not called from projects)
-    ui->groupBox->addItem("All");
-
-    // Think about get projects from base class and set current item based on ui->currPageLabel
-    for (const QString &project_name : Database::get_instance()->get_projects())
-        ui->groupBox->addItem(project_name);
-    // add another items here
+    int curr_ind = 0;
+    std::vector<QString> project_names = m_base->get_project_names();
+    for (int i = 0; i < project_names.size(); ++i) {
+        ui->groupBox->addItem(project_names[i]);
+        if (project_names[i] == m_base->get_curr_label())
+            curr_ind = i;
+    }
+    ui->groupBox->setCurrentIndex(curr_ind);
 
     if (data) {
         ui->mainTextEdit->setText(data->task_describe);

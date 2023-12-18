@@ -21,12 +21,15 @@ private:
     static Database *m_database;
     QString m_project_name;
 
-public:
-    explicit ConcreteProject(const QString &project_name, QWidget *parent = nullptr);
-    ~ConcreteProject();
 private slots:
     void on_delButton_clicked();
     void on_backButton_clicked();
+
+public:
+    explicit ConcreteProject(const QString &project_name, QWidget *parent = nullptr);
+    ~ConcreteProject();
+
+    QListWidget *get_list_widget() const;
 };
 
 #endif // CONCRETEPROJECT_HPP

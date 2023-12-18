@@ -5,6 +5,8 @@
 
 #include <QDialog>
 
+class Base;
+
 namespace Ui { class Task; }
 
 class Task : public QDialog
@@ -13,6 +15,7 @@ class Task : public QDialog
 
 private:
     Ui::Task *ui;
+    Base *m_base;
     QDate m_date;
     QTime m_time;
 
@@ -24,7 +27,7 @@ public:
     static QDateTime EDGE;
 
     // TODO Think about Array of groups as parameter
-    explicit Task(QWidget *parent = nullptr, const TaskData *data = nullptr);
+    explicit Task(Base *parent = nullptr, const TaskData *data = nullptr);
     ~Task();
 
 signals:

@@ -67,7 +67,8 @@ TaskItemWidget::~TaskItemWidget() {
 
 void TaskItemWidget::set_other_items(const std::vector<TaskItemWidget*> &other_items) {
     for (TaskItemWidget *item : other_items)
-        m_other_items.emplace_back(item);
+        if (m_data.id != item->m_data.id)
+            m_other_items.emplace_back(item);
 }
 
 void TaskItemWidget::delete_item_from_widget() {

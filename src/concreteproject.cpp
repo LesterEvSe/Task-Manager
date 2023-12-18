@@ -28,11 +28,12 @@ void ConcreteProject::on_delButton_clicked()
 
     if (dualChoose.exec() == QMessageBox::Cancel)
         return;
-
-
 }
 
 void ConcreteProject::on_backButton_clicked() {
     m_base->set_project_widget();
 }
 
+QListWidget *ConcreteProject::get_list_widget() const {
+    return ui->listWidget;
+}
