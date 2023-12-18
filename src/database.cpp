@@ -73,7 +73,6 @@ int Database::add_task(const TaskData &data) {
     return insert_query.lastInsertId().toInt();
 }
 
-// TODO fix bugs with adding. Check always return false
 bool Database::add_project(const QString &project) {
     QSqlQuery check_query;
     check_query.prepare("SELECT COUNT(*) FROM Projects WHERE project = :project");
@@ -86,7 +85,6 @@ bool Database::add_project(const QString &project) {
     // project already exist
     if (check_query.value(0).toInt() > 0)
         return false;
-    check_query.finish();
 
     QSqlQuery insert_query;
     insert_query.prepare("INSERT INTO Projects (project) VALUES (:project)");

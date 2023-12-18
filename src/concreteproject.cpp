@@ -4,15 +4,14 @@
 Database *ConcreteProject::m_database = Database::get_instance();
 
 
-ConcreteProject::ConcreteProject(int id, QWidget *parent) :
+ConcreteProject::ConcreteProject(const QString &project_name, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConcreteProject),
-    m_id(id)
+    m_project_name(project_name)
 {
     ui->setupUi(this);
 }
 
-ConcreteProject::~ConcreteProject()
-{
+ConcreteProject::~ConcreteProject() {
     delete ui;
 }

@@ -75,7 +75,7 @@ void Task::on_okButton_clicked() {
         task_data.date = task_data.time == EDGE.time() ? EDGE.date() : task_data.date;
     }
     else
-        task_data.time = ui->timeEdit->time();
+        task_data.time = ui->timeEdit->time() <= QTime(1, 0, 0) ? EDGE.time() : ui->timeEdit->time();
 
     task_data.priority = (*(ui->priorityBox->currentText().toStdString().end() - 1))-'0';
     task_data.time = task_data.time.addMSecs(task_data.priority); // for sorting by priority too

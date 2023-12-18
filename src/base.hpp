@@ -28,8 +28,8 @@ private:
     static Database *m_database;
     QListWidget *m_today, *m_all_tasks, *m_projects;
 
-    // concrete item in project. Value - index in ui->stackedWidget, id in database
-    std::unordered_map<QListWidgetItem*, std::pair<int, int>> memo;
+    // Concrete project name. Value - index in ui->stackedWidget (0 - is not created)
+    std::unordered_map<QString, int> memo;
 
     void create_task(const TaskData &data);
     void show_error_and_exit(const QString &error);

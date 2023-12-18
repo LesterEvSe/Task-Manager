@@ -45,11 +45,8 @@ Base::Base(QWidget *parent):
     for (const TaskData &data : m_database->get_task(TaskEnum::ALL_ACTIVE))
         create_task(data);
 
-    for (const QString &project_name : m_database->get_projects()) {
-        QListWidgetItem *item = new QListWidgetItem(project_name);
-//        memo[item]
-//            m_projects->addItem(new QListWidgetItem(project_name));
-    }
+    for (const QString &project_name : m_database->get_projects())
+        m_projects->addItem(new QListWidgetItem(project_name));
 
     } catch (const QSqlError &error) {
         show_error_and_exit("Caught SQL error in func " + error.text());
@@ -125,7 +122,10 @@ void Base::on_addProjectButton_clicked()
     project->move(0, currBottom.y() - dialogSize.height());
 
     connect(project, &AddProject::textEntered, this, [this](QString text){
-        m_database->add_project(text);
+        if (!m_database->add_project(text)) {
+            QMessageBox::critical(this, "Error", "You can not add a project, which name already exist.");
+            return;
+        }
         QListWidgetItem *item = new QListWidgetItem(text);
         m_projects->addItem(item);
     });
@@ -134,15 +134,23 @@ void Base::on_addProjectButton_clicked()
 
 void Base::on_projectsListWidget_itemClicked(QListWidgetItem *item)
 {
-    ConcreteProject *project = new ConcreteProject(1, this);
+    QString project_name = item->text();
+    ui->currPageLabel->setText(project_name);
 
-    // need to do it, otherwise not working
+    if (memo[project_name]) {
+        ui->stackedWidget->setCurrentIndex(memo[project_name]);
+        return;
+    }
+    ConcreteProject *project = new ConcreteProject(project_name, this);
+
+    // need to do it, otherwise not displayed
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(project);
     QWidget *widget = new QWidget();
     widget->setLayout(layout);
 
     int ind = ui->stackedWidget->addWidget(widget);
+    memo[project_name] = ind;
     ui->stackedWidget->setCurrentIndex(ind);
 }
 

@@ -17,10 +17,10 @@ class ConcreteProject : public QWidget
 private:
     Ui::ConcreteProject *ui;
     static Database *m_database;
-    int m_id;
+    QString m_project_name;
 
 public:
-    explicit ConcreteProject(int id, QWidget *parent = nullptr);
+    explicit ConcreteProject(const QString &project_name, QWidget *parent = nullptr);
     ~ConcreteProject();
 };
 
