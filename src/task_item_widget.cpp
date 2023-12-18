@@ -66,8 +66,10 @@ TaskItemWidget::~TaskItemWidget() {
 }
 
 void TaskItemWidget::set_other_items(const std::vector<TaskItemWidget*> &other_items) {
+    // Since we send all elements including the current one,
+    // We do a check so that we don't delete the same element twice
     for (TaskItemWidget *item : other_items)
-        if (m_data.id != item->m_data.id)
+        if (item != this)
             m_other_items.emplace_back(item);
 }
 
@@ -126,12 +128,6 @@ void TaskItemWidget::change_view(const TaskData &data) {
 
     if (data.date >= Task::EDGE.date()) return;
     m_date_label = new QLabel(data.date.toString("dd MMM ddd"), this);
-
-//    QString time = data.time >= Task::EDGE.time() ? "" : data.time.toString("hh:mm");
-//    if (data.time.hour() == 0 && data.time.minute() == 0)
-//        time = "";
-//    else
-//        time = data.time.toString("hh:mm");
     m_time_label = new QLabel(data.time >= Task::EDGE.time() ? "" : data.time.toString("hh:mm"), this);
 }
 

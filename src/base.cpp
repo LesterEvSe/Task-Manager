@@ -45,8 +45,6 @@ Base::Base(QWidget *parent):
     for (const TaskData &data : m_database->get_task(TaskEnum::ALL_ACTIVE))
         create_task(data);
 
-    // CREATE PROJECTS
-    memo["All"] = {TaskEnum::ALL_ACTIVE, nullptr};
     for (const QString &project_name : m_database->get_projects()) {
         m_projects->addItem(new QListWidgetItem(project_name));
         create_project(project_name);
@@ -96,7 +94,7 @@ Task *Base::create_custom_dialog(const TaskData *data) {
 void Base::create_task(const TaskData &data) {
     auto create = [this](QListWidget *listWidget, const TaskData &new_data) {
         QListWidgetItem *item = new QListWidgetItem();
-        TaskItemWidget *taskItem = new TaskItemWidget(new_data, m_all_tasks, this);
+        TaskItemWidget *taskItem = new TaskItemWidget(new_data, listWidget, this);
         connect(taskItem, &TaskItemWidget::sendNewData, this, &Base::create_task);
 
         item->setSizeHint(taskItem->sizeHint());

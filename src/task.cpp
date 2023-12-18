@@ -23,11 +23,12 @@ Task::Task(Base *parent, const TaskData *data) :
 
     // TODO, think about this. first item (if we not called from projects)
     int curr_ind = 0;
+    ui->groupBox->addItem("All");
     std::vector<QString> project_names = m_base->get_project_names();
     for (int i = 0; i < project_names.size(); ++i) {
         ui->groupBox->addItem(project_names[i]);
         if (project_names[i] == m_base->get_curr_label())
-            curr_ind = i;
+            curr_ind = i+1;
     }
     ui->groupBox->setCurrentIndex(curr_ind);
 
