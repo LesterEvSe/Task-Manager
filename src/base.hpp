@@ -35,7 +35,6 @@ private:
     void delete_project(const QString &project_name);
 
     void create_task(const TaskData &data);
-    void show_error_and_exit(const QString &error);
 
 private slots:
     void on_pushButton_clicked();
@@ -47,6 +46,7 @@ private slots:
 
 public:
     Base(QWidget *parent = nullptr);
+    void show_error_and_exit(const QString &error);
     ~Base();
 
     void set_project_widget();

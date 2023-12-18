@@ -32,6 +32,7 @@ TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base
     change_view(data);
     set_styles();
 
+    // Try block here
     if (m_data.id <= -1)
         m_data.id = m_database->add_task(m_data);
 
@@ -96,6 +97,7 @@ void TaskItemWidget::delete_item() {
         item->delete_item_from_widget();
 
     // Order is important (maybe)
+    // TODO try block here
     m_database->del_task(m_data.id);
     list->removeItemWidget(item);
     delete item;

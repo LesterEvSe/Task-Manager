@@ -177,6 +177,10 @@ void Base::create_project(const QString &project_name) {
 
     int ind = ui->stackedWidget->addWidget(widget);
     memo[project_name] = {ind, project->get_list_widget()};
+
+    // TODO try block here
+    for (const TaskData &data : m_database->get_project_data(project_name))
+        create_task(data);
 }
 
 void Base::delete_project(const QString &project_name) {
