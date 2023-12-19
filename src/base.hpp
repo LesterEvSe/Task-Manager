@@ -53,7 +53,7 @@ public:
 
     void set_project_widget();
     std::vector<QString> get_project_names() const;
-    const QString &get_curr_label_text() const;
+    QString get_curr_label_text() const;
 
     Task *create_custom_dialog(const TaskData *data = nullptr);
     void save_tasks();

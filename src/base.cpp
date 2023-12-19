@@ -80,7 +80,7 @@ std::vector<QString> Base::get_project_names() const {
     return names;
 }
 
-const QString &Base::get_curr_label_text() const {
+QString Base::get_curr_label_text() const {
     return ui->currPageLabel->text();
 }
 
@@ -197,12 +197,10 @@ void Base::delete_project(const QString &project_name) {
     }
 
     QListWidget *listWidget = memo[project_name].second;
-    for (int i = 0; i < listWidget->count(); ++i) {
-        QWidget *widget = listWidget->itemWidget(listWidget->item(i));
+    while (listWidget->count()) {
+        QWidget *widget = listWidget->itemWidget(listWidget->item(0));
         TaskItemWidget *taskWidget = qobject_cast<TaskItemWidget*>(widget);
-
-        if (taskWidget)
-            taskWidget->delete_item();
+        taskWidget->delete_item();
     }
 
     for (int i = 0; i < m_projects->count(); ++i) {
