@@ -27,7 +27,7 @@ Task::Task(Base *parent, const TaskData *data) :
     std::vector<QString> project_names = m_base->get_project_names();
     for (int i = 0; i < project_names.size(); ++i) {
         ui->groupBox->addItem(project_names[i]);
-        if (project_names[i] == m_base->get_curr_label())
+        if (project_names[i] == m_base->get_curr_label_text())
             curr_ind = i+1;
     }
     ui->groupBox->setCurrentIndex(curr_ind);

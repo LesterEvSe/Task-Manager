@@ -15,6 +15,8 @@
 class TaskItemWidget : public QWidget
 {
     Q_OBJECT
+    friend class Base;
+
 private:
     static Database *s_database;
     QListWidget *m_parent;

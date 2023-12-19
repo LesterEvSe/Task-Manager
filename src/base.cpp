@@ -80,7 +80,7 @@ std::vector<QString> Base::get_project_names() const {
     return names;
 }
 
-const QString &Base::get_curr_label() const {
+const QString &Base::get_curr_label_text() const {
     return ui->currPageLabel->text();
 }
 
@@ -187,8 +187,31 @@ void Base::create_project(const QString &project_name) {
     memo[project_name] = {ind, project->get_list_widget()};
 }
 
+// It does not work properly
 void Base::delete_project(const QString &project_name) {
-    // implement later
+    set_project_widget();
+    try {
+    s_database->del_project_and_tasks(project_name);
+    } catch (const QSqlError &error) {
+        show_error_and_exit("Caught SQL error in func " + error.text());
+    }
+
+    QListWidget *listWidget = memo[project_name].second;
+    for (int i = 0; i < listWidget->count(); ++i) {
+        QWidget *widget = listWidget->itemWidget(listWidget->item(i));
+        TaskItemWidget *taskWidget = qobject_cast<TaskItemWidget*>(widget);
+
+        if (taskWidget)
+            taskWidget->delete_item();
+    }
+
+    for (int i = 0; i < m_projects->count(); ++i) {
+        QListWidgetItem *item = m_projects->item(i);
+        if (item->text() != project_name) continue;
+
+        m_projects->takeItem(i);
+        break;
+    }
 }
 
 void Base::on_projectsListWidget_itemClicked(QListWidgetItem *item)

@@ -5,6 +5,7 @@
 #include "base.hpp"
 
 #include <QWidget>
+#include <QListWidget>
 
 
 namespace Ui {

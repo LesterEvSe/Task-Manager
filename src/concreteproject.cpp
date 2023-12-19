@@ -26,8 +26,8 @@ void ConcreteProject::on_delButton_clicked()
     dualChoose.setInformativeText("The project and all tasks in it will be deleted");
     dualChoose.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (dualChoose.exec() == QMessageBox::Cancel)
-        return;
+    if (dualChoose.exec() == QMessageBox::Ok)
+        m_base->delete_project(m_project_name);
 }
 
 void ConcreteProject::on_backButton_clicked() {

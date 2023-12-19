@@ -3,6 +3,7 @@
 
 #include "task.hpp"
 #include "database.hpp"
+#include "concreteproject.hpp"
 
 #include <QWidget>
 #include <QListWidget>
@@ -16,6 +17,7 @@ QT_END_NAMESPACE
 class Base : public QWidget
 {
     Q_OBJECT
+    friend class ConcreteProject;
 
 private:
     enum Ind {
@@ -25,7 +27,8 @@ private:
     };
 
     Ui::Base *ui;
-    static Database *m_database;
+    static Database *s_database;
+    static int s_beg_ind;
     QListWidget *m_today, *m_all_tasks, *m_projects;
 
     // Concrete project name. Value - index in ui->stackedWidget (0 - is not created), it's QListWidget
@@ -33,7 +36,6 @@ private:
 
     void create_project(const QString &project_name);
     void delete_project(const QString &project_name);
-
     void create_task(const TaskData &data);
 
 private slots:
@@ -51,7 +53,7 @@ public:
 
     void set_project_widget();
     std::vector<QString> get_project_names() const;
-    const QString &get_curr_label() const;
+    const QString &get_curr_label_text() const;
 
     Task *create_custom_dialog(const TaskData *data = nullptr);
     void save_tasks();

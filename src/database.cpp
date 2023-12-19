@@ -46,11 +46,11 @@ Database::Database():
     }
 
     // Clear Tables
-//    QSqlQuery clear_query;
-//    if (!clear_query.exec("DELETE FROM TaskData"))
-//        QMessageBox::information(nullptr, "Failed to delete TaskData table.", query.lastError().text());
-//    if (!clear_query.exec("DELETE FROM Projects"))
-//        QMessageBox::information(nullptr, "Failed to delete Projects table.", query.lastError().text());
+    QSqlQuery clear_query;
+    if (!clear_query.exec("DELETE FROM TaskData"))
+        QMessageBox::information(nullptr, "Failed to delete TaskData table.", query.lastError().text());
+    if (!clear_query.exec("DELETE FROM Projects"))
+        QMessageBox::information(nullptr, "Failed to delete Projects table.", query.lastError().text());
 }
 
 Database *Database::get_instance() {
@@ -115,13 +115,13 @@ void Database::del_project_and_tasks(const QString &project) {
         throw QSqlError(delete_query.lastError().text(),
                         QString("Failed to delete the project."));
 
-    QSqlQuery del_from_task_data_query;
-    del_from_task_data_query.prepare("DELETE FROM TaskData WHERE project = :project");
-    del_from_task_data_query.bindValue(":project", project);
+//    QSqlQuery del_from_task_data_query;
+//    del_from_task_data_query.prepare("DELETE FROM TaskData WHERE task_group = :project");
+//    del_from_task_data_query.bindValue(":project", project);
 
-    if (!del_from_task_data_query.exec())
-        throw QSqlError(del_from_task_data_query.lastError().text(),
-                        QString("Failed to delete the project data."));
+//    if (!del_from_task_data_query.exec())
+//        throw QSqlError(del_from_task_data_query.lastError().text(),
+//                        QString("Failed to delete the project data."));
 }
 
 std::vector<TaskData> Database::get_task(TaskEnum task) const {
