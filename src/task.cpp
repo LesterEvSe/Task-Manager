@@ -47,7 +47,6 @@ Task::Task(Base *parent, const TaskData *data) :
         m_date = QDate::currentDate();
         ui->dateEdit->setDate(m_date);
         ui->priorityBox->setCurrentIndex(4);
-        // find and set appropriate group
     }
 
     connect(ui->cancelButton, &QPushButton::clicked, this, &Task::on_cancelButton_clicked);
@@ -89,7 +88,7 @@ void Task::on_okButton_clicked() {
         task_data.time = ui->timeEdit->time() <= QTime(1, 0, 0) ? EDGE.time() : ui->timeEdit->time();
 
     task_data.priority = (*(ui->priorityBox->currentText().toStdString().end() - 1))-'0';
-    task_data.time = task_data.time.addMSecs(task_data.priority); // for sorting by priority too
+    task_data.time = task_data.time.addMSecs(task_data.priority); // for sorting by priority
     task_data.group = ui->groupBox->currentText();
 
     emit sendData(task_data);

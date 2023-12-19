@@ -18,7 +18,7 @@ class ConcreteProject : public QWidget
 private:
     Ui::ConcreteProject *ui;
     Base *m_base;
-    static Database *m_database;
+    static Database *s_database;
     QString m_project_name;
 
 private slots:

@@ -11,7 +11,8 @@
 #include <QSqlError> // for exceptions
 #include <exception>
 
-Database *Base::m_database = Database::get_instance();
+Database *Base::s_database = Database::get_instance();
+int Base::s_beg_ind = 1; // After "Overdue" text
 
 
 Base::Base(QWidget *parent):
@@ -32,7 +33,7 @@ Base::Base(QWidget *parent):
 
     try {
     // Download overdue data
-    for (const TaskData &data : m_database->get_task(TaskEnum::OVERDUE))
+    for (const TaskData &data : s_database->get_task(TaskEnum::OVERDUE))
         create_task(data);
 
     m_today->addItem(new QListWidgetItem(
@@ -41,14 +42,21 @@ Base::Base(QWidget *parent):
 
     m_all_tasks->addItem(new QListWidgetItem("Current"));
 
-    // CREATE TASK
-    for (const TaskData &data : m_database->get_task(TaskEnum::ALL_ACTIVE))
-        create_task(data);
+    // ORDER IS IMPORTANT!!!
+    /* Let's say there is data in a project, we fill the 'All' window,
+    then when we create a task in 'All' we will want to add the task to a specific project,
+    but the point is that the projects have not been create yet!
+    The application will crash, that's all */
 
-    for (const QString &project_name : m_database->get_projects()) {
+    // CREATE PROJECT
+    for (const QString &project_name : s_database->get_projects()) {
         m_projects->addItem(new QListWidgetItem(project_name));
         create_project(project_name);
     }
+
+    // CREATE TASK
+    for (const TaskData &data : s_database->get_task(TaskEnum::ALL_ACTIVE))
+        create_task(data);
 
     } catch (const QSqlError &error) {
         show_error_and_exit("Caught SQL error in func " + error.text());
@@ -155,7 +163,7 @@ void Base::on_addProjectButton_clicked()
     project->move(0, currBottom.y() - dialogSize.height());
 
     connect(project, &AddProject::textEntered, this, [this](QString text){
-        if (!m_database->add_project(text)) {
+        if (!s_database->add_project(text)) {
             QMessageBox::critical(this, "Error", "You can not add a project, which name already exist.");
             return;
         }
@@ -177,10 +185,6 @@ void Base::create_project(const QString &project_name) {
 
     int ind = ui->stackedWidget->addWidget(widget);
     memo[project_name] = {ind, project->get_list_widget()};
-
-    // TODO try block here
-    for (const TaskData &data : m_database->get_project_data(project_name))
-        create_task(data);
 }
 
 void Base::delete_project(const QString &project_name) {

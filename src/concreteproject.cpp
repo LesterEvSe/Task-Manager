@@ -3,7 +3,7 @@
 
 #include <QMessageBox>
 
-Database *ConcreteProject::m_database = Database::get_instance();
+Database *ConcreteProject::s_database = Database::get_instance();
 
 
 ConcreteProject::ConcreteProject(const QString &project_name, QWidget *parent) :

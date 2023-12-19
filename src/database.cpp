@@ -132,9 +132,6 @@ std::vector<TaskData> Database::get_task(TaskEnum task) const {
         query.bindValue(":current_date_time", QDateTime::currentDateTime());
         break;
 
-    case TODAY:
-        break;
-
     case ALL_ACTIVE:
         query.prepare("SELECT * FROM TaskData WHERE date_time >= :current_date_time");
         query.bindValue(":current_date_time", QDateTime::currentDateTime());

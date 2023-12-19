@@ -6,7 +6,7 @@
 
 #include <QMessageBox> // for debug output
 
-Database *TaskItemWidget::m_database = Database::get_instance();
+Database *TaskItemWidget::s_database = Database::get_instance();
 
 
 TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base):
@@ -33,8 +33,12 @@ TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base
     set_styles();
 
     // Try block here
+    try {
     if (m_data.id <= -1)
-        m_data.id = m_database->add_task(m_data);
+        m_data.id = s_database->add_task(m_data);
+    } catch (const QSqlError &error) {
+        m_base->show_error_and_exit("Caught SQL error in func " + error.text());
+    }
 
     QHBoxLayout *date_time = new QHBoxLayout();
     date_time->addWidget(m_date_label);
@@ -98,7 +102,11 @@ void TaskItemWidget::delete_item() {
 
     // Order is important (maybe)
     // TODO try block here
-    m_database->del_task(m_data.id);
+    try {
+    s_database->del_task(m_data.id);
+    } catch (const QSqlError &error) {
+        m_base->show_error_and_exit("Caught SQL error in func " + error.text());
+    }
     list->removeItemWidget(item);
     delete item;
 }
