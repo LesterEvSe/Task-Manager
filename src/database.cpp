@@ -46,11 +46,11 @@ Database::Database():
     }
 
     // Clear Tables
-    QSqlQuery clear_query;
-    if (!clear_query.exec("DELETE FROM TaskData"))
-        QMessageBox::information(nullptr, "Failed to delete TaskData table.", query.lastError().text());
-    if (!clear_query.exec("DELETE FROM Projects"))
-        QMessageBox::information(nullptr, "Failed to delete Projects table.", query.lastError().text());
+//    QSqlQuery clear_query;
+//    if (!clear_query.exec("DELETE FROM TaskData"))
+//        QMessageBox::information(nullptr, "Failed to delete TaskData table.", query.lastError().text());
+//    if (!clear_query.exec("DELETE FROM Projects"))
+//        QMessageBox::information(nullptr, "Failed to delete Projects table.", query.lastError().text());
 }
 
 Database *Database::get_instance() {
