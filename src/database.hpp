@@ -20,6 +20,8 @@ private:
     };
     QSqlDatabase m_task_manager;
 
+    void clear_tables_query();
+
     Database(const Database&) = delete;
     Database(Database&&)      = delete;
     Database &operator=(const Database&) = delete;
@@ -27,6 +29,10 @@ private:
     Database();
 
 public:
+    enum SettingsParam {
+        FONT_SIZE
+    };
+
     static Database *get_instance();
 
     // return inserted value index
@@ -35,6 +41,9 @@ public:
 
     void del_task(int id);
     void del_project_and_tasks(const QString &project);
+
+    int get_settings(SettingsParam param);
+    void set_settings(SettingsParam param, int value);
 
     std::vector<TaskData> get_task(TaskEnum task) const;
     std::vector<QString>  get_projects() const;

@@ -22,6 +22,7 @@ Base::Base(QWidget *parent):
     // For usual data and time view
     QLocale::setDefault(QLocale(QLocale::Ukrainian, QLocale::Ukraine));
     ui->setupUi(this);
+    set_styles();
 
     m_today     = ui->stackedWidget->findChild<QListWidget*>("todayListWidget");
     m_all_tasks = ui->stackedWidget->findChild<QListWidget*>("allTasksListWidget");
@@ -72,6 +73,24 @@ Base::Base(QWidget *parent):
 
 Base::~Base() {
     delete ui;
+}
+
+void Base::set_styles() {
+    // get from DB
+//    setStyleSheet("font-size: 30px;");
+
+    auto set_icon = [](QPushButton *button, const QString &path){
+        QIcon icon(path);
+        int min = std::min(button->size().width(), button->size().height());
+
+        button->setIcon(icon);
+        button->setIconSize(QSize(min, min));
+    };
+    set_icon(ui->todayButton, ":/res/today.png");
+    set_icon(ui->allButton, ":/res/all-tasks.png");
+    set_icon(ui->projectsButton, ":/res/project.png");
+    set_icon(ui->settingsButton, ":/res/settings.png");
+    ui->settingsButton->setText("");
 }
 
 std::vector<QString> Base::get_project_names() const {

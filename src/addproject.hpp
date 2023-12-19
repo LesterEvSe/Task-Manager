@@ -14,9 +14,10 @@ class AddProject : public QDialog
 private:
     Ui::AddProject *ui;
 
+    void set_styles();
+
 private slots:
     void on_okButton_clicked();
-
     void on_cancelButton_clicked();
 
 public:

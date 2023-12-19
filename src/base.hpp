@@ -39,6 +39,8 @@ private:
     void delete_project(const QString &project_name);
     void create_task(const TaskData &data);
 
+    void set_styles();
+
 private slots:
     void on_pushButton_clicked();
     void on_allButton_clicked();

@@ -19,6 +19,8 @@ private:
     QDate m_date;
     QTime m_time;
 
+    void set_styles();
+
 // Own signals
     void on_cancelButton_clicked();
     void on_okButton_clicked();

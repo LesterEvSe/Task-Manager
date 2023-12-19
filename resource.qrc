@@ -2,5 +2,11 @@
     <qresource prefix="/">
         <file>res/cancel.png</file>
         <file>res/ok.png</file>
+        <file>res/bin.png</file>
+        <file>res/return.png</file>
+        <file>res/all-tasks.png</file>
+        <file>res/today.png</file>
+        <file>res/project.png</file>
+        <file>res/settings.png</file>
     </qresource>
 </RCC>

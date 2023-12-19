@@ -3,6 +3,8 @@
 #include "base.hpp"
 
 #include <QMessageBox>
+#include <QIcon>
+
 #include "database.hpp"
 
 QDateTime Task::EDGE = QDateTime(QDate(3000, 1, 1), QTime(23, 59, 59));
@@ -14,6 +16,7 @@ Task::Task(Base *parent, const TaskData *data) :
     m_base(parent)
 {
     ui->setupUi(this);
+    set_styles();
 
     ui->priorityBox->addItem("Priority 1");
     ui->priorityBox->addItem("Priority 2");
@@ -51,6 +54,19 @@ Task::Task(Base *parent, const TaskData *data) :
 
     connect(ui->cancelButton, &QPushButton::clicked, this, &Task::on_cancelButton_clicked);
     connect(ui->okButton, &QPushButton::clicked, this, &Task::on_okButton_clicked);
+}
+
+void Task::set_styles() {
+    auto set_icon = [](QPushButton *button, const QString &path){
+        QIcon icon(path);
+        int min = std::min(button->size().width(), button->size().height());
+
+        button->setText("");
+        button->setIcon(icon);
+        button->setIconSize(QSize(min, min));
+    };
+    set_icon(ui->okButton, ":/res/ok.png");
+    set_icon(ui->cancelButton, ":/res/cancel.png");
 }
 
 Task::~Task() {

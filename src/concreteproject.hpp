@@ -22,6 +22,8 @@ private:
     static Database *s_database;
     QString m_project_name;
 
+    void set_styles();
+
 private slots:
     void on_delButton_clicked();
     void on_backButton_clicked();
