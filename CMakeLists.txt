@@ -50,7 +50,7 @@ set(ALL_SOURCES
     ${SOURCES}
     ${HEADERS}
     ${FORMS}
-    # resouce.qrc here
+    resource.qrc
 )
 
 # Need for Android build
