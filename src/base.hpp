@@ -30,6 +30,7 @@ private:
     static Database *s_database;
     static int s_beg_ind;
     QListWidget *m_today, *m_all_tasks, *m_projects;
+    QListWidgetItem *m_curr_item;
 
     // Concrete project name. Value - index in ui->stackedWidget (0 - is not created), it's QListWidget
     std::unordered_map<QString, std::pair<int, QListWidget*>> memo;

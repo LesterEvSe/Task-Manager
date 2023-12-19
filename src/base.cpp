@@ -40,7 +40,10 @@ Base::Base(QWidget *parent):
         QDate::currentDate().toString("dd MMM ddd")
     ));
 
-    m_all_tasks->addItem(new QListWidgetItem("Current"));
+    m_curr_item = new QListWidgetItem("Current");
+    m_all_tasks->addItem(m_curr_item);
+    s_beg_ind = m_all_tasks->count();
+
 
     // ORDER IS IMPORTANT!!!
     /* Let's say there is data in a project, we fill the 'All' window,
@@ -106,14 +109,37 @@ void Base::create_task(const TaskData &data) {
         connect(taskItem, &TaskItemWidget::sendNewData, this, &Base::create_task);
 
         item->setSizeHint(taskItem->sizeHint());
-        listWidget->addItem(item);
-        listWidget->setItemWidget(item, taskItem);
+        int i;
+
+        // If concrete project
+        if (listWidget != m_all_tasks && listWidget != m_today)
+            i = 0;
+        else
+            i = s_beg_ind;
+
+        for (; i < listWidget->count(); ++i) {
+            QWidget *widget = listWidget->itemWidget(listWidget->item(i));
+            TaskItemWidget *taskWidget = qobject_cast<TaskItemWidget*>(widget);
+
+            if (*taskWidget < *taskItem) continue;
+            listWidget->insertItem(i, item);
+            listWidget->setItemWidget(item, taskItem);
+            break;
+        }
+        if (i == listWidget->count()) {
+            listWidget->addItem(item);
+            listWidget->setItemWidget(item, taskItem);
+        }
         return taskItem;
     };
 
     std::vector<TaskItemWidget*> tasks;
     tasks.emplace_back(create(m_all_tasks, data));
     const TaskData &temp = tasks[0]->get_data();
+
+    connect(tasks[0], &TaskItemWidget::itemDeleted, this, [this]{
+        s_beg_ind = m_all_tasks->row(m_curr_item)+1;
+    });
 
     if (temp.date == QDate::currentDate())
         tasks.emplace_back(create(m_today, temp));

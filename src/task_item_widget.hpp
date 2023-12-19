@@ -40,6 +40,7 @@ public:
     void set_other_items(const std::vector<TaskItemWidget*> &other_items);
     void delete_item_from_widget();
 
+    bool operator< (const TaskItemWidget &right) const;
     const TaskData &get_data() const;
     ~TaskItemWidget();
 
@@ -48,6 +49,7 @@ public:
 
 signals:
     void sendNewData(TaskData data);
+    void itemDeleted();
 };
 
 #endif // TASKITEMWIDGET_HPP

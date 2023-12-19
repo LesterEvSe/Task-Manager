@@ -80,15 +80,12 @@ void Task::on_okButton_clicked() {
     task_data.date = ui->dateEdit->date() < m_date ? EDGE.date() : ui->dateEdit->date();
     if (task_data.date == EDGE.date())
         task_data.time = EDGE.time();
-    else if (task_data.date == QDate::currentDate()) {
+    else if (task_data.date == QDate::currentDate())
         task_data.time = ui->timeEdit->time() <= QTime::currentTime() ? EDGE.time() : ui->timeEdit->time();
-        task_data.date = task_data.time == EDGE.time() ? EDGE.date() : task_data.date;
-    }
     else
         task_data.time = ui->timeEdit->time() <= QTime(1, 0, 0) ? EDGE.time() : ui->timeEdit->time();
 
     task_data.priority = (*(ui->priorityBox->currentText().toStdString().end() - 1))-'0';
-    task_data.time = task_data.time.addMSecs(task_data.priority); // for sorting by priority
     task_data.group = ui->groupBox->currentText();
 
     emit sendData(task_data);

@@ -87,6 +87,7 @@ void TaskItemWidget::delete_item_from_widget() {
     if (!item) return;
 
     list->removeItemWidget(item);
+    delete item;
 }
 
 void TaskItemWidget::delete_item() {
@@ -97,17 +98,18 @@ void TaskItemWidget::delete_item() {
     QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
     if (!item) return;
 
+
     for (TaskItemWidget *item : m_other_items)
         item->delete_item_from_widget();
 
     // Order is important (maybe)
-    // TODO try block here
     try {
-    s_database->del_task(m_data.id);
+        s_database->del_task(m_data.id);
     } catch (const QSqlError &error) {
         m_base->show_error_and_exit("Caught SQL error in func " + error.text());
     }
     list->removeItemWidget(item);
+    emit itemDeleted();
     delete item;
 }
 
@@ -139,6 +141,16 @@ void TaskItemWidget::change_view(const TaskData &data) {
     if (data.date >= Task::EDGE.date()) return;
     m_date_label = new QLabel(data.date.toString("dd MMM ddd"), this);
     m_time_label = new QLabel(data.time >= Task::EDGE.time() ? "" : data.time.toString("hh:mm"), this);
+}
+
+bool TaskItemWidget::operator< (const TaskItemWidget &right) const {
+    QDateTime l = QDateTime(m_data.date, m_data.time);
+    QDateTime r = QDateTime(right.m_data.date, right.m_data.time);
+
+    if (l < r) return true;
+    if (l > r) return false;
+    return m_data.priority < right.m_data.priority;
+//    return QDateTime(m_data.date, m_data.time) < QDateTime(right.m_data.date, right.m_data.time);
 }
 
 void TaskItemWidget::mousePressEvent(QMouseEvent *event) {
