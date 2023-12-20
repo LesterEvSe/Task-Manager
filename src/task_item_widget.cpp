@@ -85,23 +85,12 @@ void TaskItemWidget::delete_item_from_widget() {
 
     list->takeItem(list->row(m_related_item));
     return;
-    // return the widget item located at the coord of the parent widget
-//    QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
-//    if (!item) return;
-
-//    list->takeItem(row);
-//    delete item;
 }
 
 void TaskItemWidget::delete_item() {
     QListWidget *list = qobject_cast<QListWidget*>(m_parent);
     if (!list) return;
-
     int row = list->row(m_related_item);
-    // return the widget item located at the coord of the parent widget
-//    QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
-//    if (!item) return;
-
 
     for (TaskItemWidget *item : m_other_items)
         item->delete_item_from_widget();
@@ -114,7 +103,6 @@ void TaskItemWidget::delete_item() {
     }
     list->takeItem(row);
     emit itemDeleted();
-//    delete item;
 }
 
 QSize TaskItemWidget::sizeHint() const {
@@ -122,10 +110,11 @@ QSize TaskItemWidget::sizeHint() const {
 }
 
 void TaskItemWidget::set_styles() {
-    // font-weight: bold;
-    m_task_label->setStyleSheet("font-size: 18px;");
-    m_date_label->setStyleSheet("font-size: 18px;");
-    m_time_label->setStyleSheet("font-size: 18px;");
+    setStyleSheet(QString("font-size: %1pt;").arg(Settings::get_font_size()));
+
+//    m_task_label->setStyleSheet("font-size: 18px;");
+//    m_date_label->setStyleSheet("font-size: 18px;");
+//    m_time_label->setStyleSheet("font-size: 18px;");
 
     m_task_label->setTextInteractionFlags(Qt::TextBrowserInteraction);
     m_task_label->setWordWrap(true);

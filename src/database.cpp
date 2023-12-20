@@ -44,23 +44,6 @@ Database::Database():
                     "project TEXT PRIMARY KEY UNIQUE)")) {
         QMessageBox::information(nullptr, "Failed to create Group table", query2.lastError().text());
     }
-
-    QSqlQuery query3("SELECT name FROM sqlite_master WHERE type='table' AND name='Settings';");
-    if (!query3.next() &&
-        !query3.exec("CREATE TABLE Settings ("
-                     "parameter TEXT PRIMARY KEY UNIQUE, "
-                     "value INTEGER)")) {
-        QMessageBox::information(nullptr, "Failed to create Group table", query3.lastError().text());
-    }
-
-    // New method if many settings
-//    QSqlQuery insert_query("INSERT INTO Settings (parameter, value) VALUES (:param, :val)");
-//    insert_query.bindValue(":param", "font_size");
-//    insert_query.bindValue(":val", 20);
-
-//    if (!insert_query.exec())
-//        QMessageBox::information(nullptr, "Failed to insert data", insert_query.lastError().text());
-
 //    clear_tables_query();
 }
 
@@ -70,43 +53,11 @@ void Database::clear_tables_query() {
         QMessageBox::information(nullptr, "Failed to delete TaskData table.", clear_query.lastError().text());
     if (!clear_query.exec("DELETE FROM Projects"))
         QMessageBox::information(nullptr, "Failed to delete Projects table.", clear_query.lastError().text());
-    if (!clear_query.exec("DELETE FROM Settings"))
-        QMessageBox::information(nullptr, "Failed to delete Settings table.", clear_query.lastError().text());
 }
 
 Database *Database::get_instance() {
     static Database TaskManager = Database();
     return &TaskManager;
-}
-
-int Database::get_settings(SettingsParam param) {
-    QSqlQuery query("SELECT value FROM Settings WHERE parameter = :param");
-
-    switch (param) {
-    case FONT_SIZE:
-        query.bindValue(":param", "font_size");
-    default:
-        throw QString("'set settings'. Invalid value in SettingsParam");
-    }
-
-    if (!query.exec())
-        throw QSqlError(query.lastError().text(), QString("'get projects'."));
-    return query.value(0).toInt();
-}
-void Database::set_settings(SettingsParam param, int value) {
-    QSqlQuery query("UPDATE Settings SET value = :val WHERE parameter = :param");
-
-    switch (param) {
-    case FONT_SIZE:
-        query.bindValue(":param", "font_size");
-        query.bindValue(":val", value);
-    default:
-        throw QString("'set settings'. Invalid value in SettingsParam");
-    }
-
-    if (!query.exec())
-        throw QSqlError(query.lastError().text(),
-                        QString("Failed to set settings."));
 }
 
 int Database::add_task(const TaskData &data) {

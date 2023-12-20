@@ -57,6 +57,7 @@ Task::Task(Base *parent, const TaskData *data) :
 }
 
 void Task::set_styles() {
+    setStyleSheet(QString("font-size: %1pt;").arg(Settings::get_font_size()));
     auto set_icon = [](QPushButton *button, const QString &path){
         QIcon icon(path);
         int min = std::min(button->size().width(), button->size().height());

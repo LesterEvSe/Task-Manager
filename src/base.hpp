@@ -4,6 +4,7 @@
 #include "task.hpp"
 #include "database.hpp"
 #include "concreteproject.hpp"
+#include "settings.hpp"
 
 #include <QWidget>
 #include <QListWidget>
@@ -54,6 +55,8 @@ private slots:
 
     void on_upButton_clicked();
     void on_downButton_clicked();
+
+    void on_settingsButton_clicked();
 
 public:
     Base(QWidget *parent = nullptr);

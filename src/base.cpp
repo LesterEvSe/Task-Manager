@@ -5,6 +5,7 @@
 #include "task_enum.hpp"
 #include "addproject.hpp"
 #include "concreteproject.hpp"
+#include "settings.hpp"
 
 #include <QMessageBox>
 #include <QInputDialog>
@@ -81,8 +82,7 @@ Base::~Base() {
 }
 
 void Base::set_styles() {
-    // get from DB
-    setStyleSheet("font-size: 25px;");
+    setStyleSheet(QString("font-size: %1pt;").arg(Settings::get_font_size()));
 
     auto set_icon = [](QPushButton *button, const QString &path, bool empty=false){
         QIcon icon(path);
@@ -295,5 +295,13 @@ void Base::on_downButton_clicked()
 {
     QListWidget *list = ind_widget[ui->stackedWidget->currentIndex()];
     list->verticalScrollBar()->setValue(list->verticalScrollBar()->value() + list->verticalScrollBar()->singleStep());
+}
+
+
+void Base::on_settingsButton_clicked()
+{
+    Settings *settings = new Settings(this);
+    settings->resize(width(), height());
+    settings->exec();
 }
 

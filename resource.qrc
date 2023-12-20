@@ -11,5 +11,6 @@
         <file>res/arrow-up.png</file>
         <file>res/add-task.png</file>
         <file>res/add-project.png</file>
+        <file>res/save.png</file>
     </qresource>
 </RCC>
