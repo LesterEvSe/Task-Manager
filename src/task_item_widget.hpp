@@ -20,6 +20,8 @@ class TaskItemWidget : public QWidget
 private:
     static Database *s_database;
     QListWidget *m_parent;
+    QListWidgetItem *m_related_item;
+
     Base *m_base;
     TaskData m_data; // for restore data in window
 
@@ -33,7 +35,7 @@ private:
     void delete_item();
 
 public:
-    TaskItemWidget(const TaskData &data, QWidget *parent, Base *base);
+    TaskItemWidget(const TaskData &data, QWidget *parent, Base *base, QListWidgetItem *related_item);
     void change_view(const TaskData &data);
     QSize sizeHint() const override;
 

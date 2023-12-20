@@ -35,6 +35,9 @@ private:
     // Concrete project name. Value - index in ui->stackedWidget (0 - is not created), it's QListWidget
     std::unordered_map<QString, std::pair<int, QListWidget*>> memo;
 
+    // index in ui->stackedWidget and it's QListWidget
+    std::unordered_map<int, QListWidget*> ind_widget;
+
     void create_project(const QString &project_name);
     void delete_project(const QString &project_name);
     void create_task(const TaskData &data);
@@ -48,6 +51,9 @@ private slots:
     void on_projectsButton_clicked();
     void on_addProjectButton_clicked();
     void on_projectsListWidget_itemClicked(QListWidgetItem *item);
+
+    void on_upButton_clicked();
+    void on_downButton_clicked();
 
 public:
     Base(QWidget *parent = nullptr);

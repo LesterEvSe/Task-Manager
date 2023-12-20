@@ -9,9 +9,10 @@
 Database *TaskItemWidget::s_database = Database::get_instance();
 
 
-TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base):
+TaskItemWidget::TaskItemWidget(const TaskData &data, QWidget *parent, Base *base, QListWidgetItem *related_item):
     QWidget(parent),
     m_parent(qobject_cast<QListWidget*>(parent)),
+    m_related_item(related_item),
     m_base(base),
     m_data(data),
 
@@ -82,21 +83,24 @@ void TaskItemWidget::delete_item_from_widget() {
     QListWidget *list = qobject_cast<QListWidget*>(m_parent);
     if (!list) return;
 
+    list->takeItem(list->row(m_related_item));
+    return;
     // return the widget item located at the coord of the parent widget
-    QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
-    if (!item) return;
+//    QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
+//    if (!item) return;
 
-    list->removeItemWidget(item);
-    delete item;
+//    list->takeItem(row);
+//    delete item;
 }
 
 void TaskItemWidget::delete_item() {
     QListWidget *list = qobject_cast<QListWidget*>(m_parent);
     if (!list) return;
 
+    int row = list->row(m_related_item);
     // return the widget item located at the coord of the parent widget
-    QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
-    if (!item) return;
+//    QListWidgetItem *item = list->itemAt(mapToParent(QPoint(0, 0)));
+//    if (!item) return;
 
 
     for (TaskItemWidget *item : m_other_items)
@@ -108,9 +112,9 @@ void TaskItemWidget::delete_item() {
     } catch (const QSqlError &error) {
         m_base->show_error_and_exit("Caught SQL error in func " + error.text());
     }
-    list->removeItemWidget(item);
+    list->takeItem(row);
     emit itemDeleted();
-    delete item;
+//    delete item;
 }
 
 QSize TaskItemWidget::sizeHint() const {
@@ -150,7 +154,6 @@ bool TaskItemWidget::operator< (const TaskItemWidget &right) const {
     if (l < r) return true;
     if (l > r) return false;
     return m_data.priority < right.m_data.priority;
-//    return QDateTime(m_data.date, m_data.time) < QDateTime(right.m_data.date, right.m_data.time);
 }
 
 void TaskItemWidget::mousePressEvent(QMouseEvent *event) {

@@ -30,7 +30,13 @@ void AddProject::set_styles() {
 }
 
 void AddProject::on_cancelButton_clicked() {
-    reject();
+    QMessageBox dualChoose;
+    dualChoose.setText("Delete changes?");
+    dualChoose.setInformativeText("The changes you make will not be saved.");
+    dualChoose.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (dualChoose.exec() == QMessageBox::Ok)
+        reject();
 }
 
 void AddProject::on_okButton_clicked()

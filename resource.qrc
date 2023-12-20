@@ -8,5 +8,8 @@
         <file>res/today.png</file>
         <file>res/project.png</file>
         <file>res/settings.png</file>
+        <file>res/arrow-up.png</file>
+        <file>res/add-task.png</file>
+        <file>res/add-project.png</file>
     </qresource>
 </RCC>

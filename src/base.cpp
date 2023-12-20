@@ -10,6 +10,7 @@
 #include <QInputDialog>
 #include <QSqlError> // for exceptions
 #include <exception>
+#include <QScrollBar>
 
 Database *Base::s_database = Database::get_instance();
 int Base::s_beg_ind = 1; // After "Overdue" text
@@ -28,6 +29,10 @@ Base::Base(QWidget *parent):
     m_all_tasks = ui->stackedWidget->findChild<QListWidget*>("allTasksListWidget");
     m_projects  = ui->stackedWidget->findChild<QListWidget*>("projectsListWidget");
     m_projects->setWordWrap(true);
+
+    ind_widget[TODAY] = m_today;
+    ind_widget[ALL_ACTIVE] = m_all_tasks;
+    ind_widget[PROJECTS] = m_projects;
 
     m_today->addItem(new QListWidgetItem("Overdue"));
     m_all_tasks->addItem(new QListWidgetItem("Overdue"));
@@ -77,20 +82,35 @@ Base::~Base() {
 
 void Base::set_styles() {
     // get from DB
-//    setStyleSheet("font-size: 30px;");
+    setStyleSheet("font-size: 25px;");
 
-    auto set_icon = [](QPushButton *button, const QString &path){
+    auto set_icon = [](QPushButton *button, const QString &path, bool empty=false){
         QIcon icon(path);
         int min = std::min(button->size().width(), button->size().height());
 
+        if (empty)
+            button->setText("");
         button->setIcon(icon);
         button->setIconSize(QSize(min, min));
     };
     set_icon(ui->todayButton, ":/res/today.png");
     set_icon(ui->allButton, ":/res/all-tasks.png");
     set_icon(ui->projectsButton, ":/res/project.png");
-    set_icon(ui->settingsButton, ":/res/settings.png");
-    ui->settingsButton->setText("");
+
+    set_icon(ui->pushButton, ":/res/add-task.png", true);
+    set_icon(ui->settingsButton, ":/res/settings.png", true);
+    set_icon(ui->addProjectButton, ":/res/add-project.png");
+    set_icon(ui->upButton, ":/res/arrow-up.png", true);
+
+    QPixmap rotated = QPixmap(":/res/arrow-up.png").transformed(
+        QTransform().rotate(180)
+    );
+
+    int min = std::min(ui->downButton->size().width(), ui->downButton->size().height());
+    ui->downButton->setText("");
+
+    ui->downButton->setIcon(QIcon(rotated));
+    ui->downButton->setIconSize(QSize(min, min));
 }
 
 std::vector<QString> Base::get_project_names() const {
@@ -124,7 +144,7 @@ Task *Base::create_custom_dialog(const TaskData *data) {
 void Base::create_task(const TaskData &data) {
     auto create = [this](QListWidget *listWidget, const TaskData &new_data) {
         QListWidgetItem *item = new QListWidgetItem();
-        TaskItemWidget *taskItem = new TaskItemWidget(new_data, listWidget, this);
+        TaskItemWidget *taskItem = new TaskItemWidget(new_data, listWidget, this, item);
         connect(taskItem, &TaskItemWidget::sendNewData, this, &Base::create_task);
 
         item->setSizeHint(taskItem->sizeHint());
@@ -140,15 +160,14 @@ void Base::create_task(const TaskData &data) {
             QWidget *widget = listWidget->itemWidget(listWidget->item(i));
             TaskItemWidget *taskWidget = qobject_cast<TaskItemWidget*>(widget);
 
-            if (*taskWidget < *taskItem) continue;
+            if (i == listWidget->count() || *taskWidget < *taskItem) continue;
             listWidget->insertItem(i, item);
-            listWidget->setItemWidget(item, taskItem);
             break;
         }
-        if (i == listWidget->count()) {
+        if (i == listWidget->count())
             listWidget->addItem(item);
-            listWidget->setItemWidget(item, taskItem);
-        }
+
+        listWidget->setItemWidget(item, taskItem);
         return taskItem;
     };
 
@@ -230,6 +249,7 @@ void Base::create_project(const QString &project_name) {
 
     int ind = ui->stackedWidget->addWidget(widget);
     memo[project_name] = {ind, project->get_list_widget()};
+    ind_widget[ind] = project->get_list_widget();
 }
 
 // It does not work properly
@@ -262,5 +282,18 @@ void Base::on_projectsListWidget_itemClicked(QListWidgetItem *item)
     QString project_name = item->text();
     ui->currPageLabel->setText(project_name);
     ui->stackedWidget->setCurrentIndex(memo[project_name].first);
+}
+
+
+void Base::on_upButton_clicked()
+{
+    QListWidget *list = ind_widget[ui->stackedWidget->currentIndex()];
+    list->verticalScrollBar()->setValue(list->verticalScrollBar()->value() - list->verticalScrollBar()->singleStep());
+}
+
+void Base::on_downButton_clicked()
+{
+    QListWidget *list = ind_widget[ui->stackedWidget->currentIndex()];
+    list->verticalScrollBar()->setValue(list->verticalScrollBar()->value() + list->verticalScrollBar()->singleStep());
 }
 
