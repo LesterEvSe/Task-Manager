@@ -160,7 +160,7 @@ void Base::create_task(const TaskData &data) {
             QWidget *widget = listWidget->itemWidget(listWidget->item(i));
             TaskItemWidget *taskWidget = qobject_cast<TaskItemWidget*>(widget);
 
-            if (i == listWidget->count() || *taskWidget < *taskItem) continue;
+            if (*taskWidget < *taskItem) continue;
             listWidget->insertItem(i, item);
             break;
         }
@@ -252,7 +252,6 @@ void Base::create_project(const QString &project_name) {
     ind_widget[ind] = project->get_list_widget();
 }
 
-// It does not work properly
 void Base::delete_project(const QString &project_name) {
     set_project_widget();
     try {
